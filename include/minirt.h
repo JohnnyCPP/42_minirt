@@ -23,6 +23,7 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
+# include <stdio.h>
 # include "libft.h"
 # include "minirt_constants.h"
 # include "minirt_structures.h"
