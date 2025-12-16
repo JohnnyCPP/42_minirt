@@ -15,7 +15,7 @@
 ###########################
 
 
-NAME			= minirt
+NAME			= miniRT
 
 
 INC_PATH		= ./include/
@@ -34,6 +34,11 @@ CC				= cc
 DEBUG_SYMBOLS	= -g3
 CFLAGS			= -Wall -Wextra -Werror
 INCLUDE_LIBFT	= -I ${LIBFT_INC_PATH}
+# include "libm.a" static library
+# (/usr/lib/libm.a)
+# contains the object files of math library 
+# that are used in the project
+INCLUDE_MATH	= -lm
 INCLUDE			= -I ${INC_PATH} ${INCLUDE_LIBFT}
 
 

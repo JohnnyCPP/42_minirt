@@ -15,6 +15,6 @@ int	main(int argc, char **argv)
 {
 	(void) argc;
 	(void) argv;
-	printf("Hello, world!\n");
+	printf("Hello, %f!\n", sin(3.14));
 	return (EXIT_SUCCESS);
 }

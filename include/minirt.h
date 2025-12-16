@@ -24,6 +24,7 @@
 # define MINIRT_H
 
 # include <stdio.h>
+# include <math.h>
 # include "libft.h"
 # include "minirt_constants.h"
 # include "minirt_structures.h"
