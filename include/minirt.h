@@ -23,6 +23,12 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
+//	adds X Events and X Masks
+# include <X11/X.h>
+//	adds keysymbols to map to, when KeyPress events are fired
+# include <X11/keysym.h>
+# include <mlx.h>
+
 # include <stdio.h>
 # include <math.h>
 # include "libft.h"
