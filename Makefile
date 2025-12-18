@@ -62,8 +62,8 @@ CFLAGS			= -Wall -Wextra -Werror
 #                   minilibx itself
 X11_FILES		= -lXext -lX11
 MATH_FILE		= -lm
-MLX_FILE		= -lmlx_Linux
-ADD_LIBS		= ${X11_FILES} ${MATH_FILE} ${MLX_FILE}
+MLX_FILES		= -lmlx -lmlx_Linux
+ADD_LIBS		= ${X11_FILES} ${MATH_FILE} ${MLX_FILES}
 
 
 LINKER_FLAGS	= -L ${MINILIBX_PATH} ${ADD_LIBS}
