@@ -39,25 +39,21 @@ DEBUG_SYMBOLS	= -g3
 CFLAGS			= -Wall -Wextra -Werror
 
 
-# include "libm.a" static library
-# (/usr/lib/libm.a)
-# contains the object files of math library 
-# that are used in the project
-MATH_FILE		= -lm
-
-
 # "-l<file>" instructs the linker to add a specific library by its name.
 #            the linker will consider the "lib" prefix and ".a"/".so" sufix.
 #            e.g. "-lft" links against "libft.a" or "libft.so".
 #            note: this flag can't have a space in between, it's
 #                  processed as a single token
 #
-# "-lmlx" links against "libmlx.a"
+# "-lXext"      links against the "libXext" library, an extension for
+#               the X11 windowing system. It's a dependency of minilibx
+#
+# "-lX11"       links against the "libX11" library. Provides the core functions
+#               of the X11 windowing system
+#
+# "-lm"         links against "libm.a", the math library
+#
 # "-lmlx_Linux" links against "libmlx_Linux.a"
-# "-lXext" links against the "libXext" library, an extension for
-#          the X11 windowing system. It's a dependency of minilibx
-# "-lX11" links against the "libX11" library. Provides the core functions
-#         of the X11 windowing system
 #
 # additional notes: minilibx is a lightweight library that relies on X11
 #                   for graphical rendering. "-lXext -lX11" are dependencies
@@ -65,9 +61,12 @@ MATH_FILE		= -lm
 #                   functionality. "-lmlx -lmlx_Linux" are specific to
 #                   minilibx itself
 X11_FILES		= -lXext -lX11
-#MLX_SPECIFICS	= -lmlx -lmlx_Linux
+MATH_FILE		= -lm
 MLX_FILE		= -lmlx_Linux
-LINKER_FLAGS	= -L ${MINILIBX_PATH} ${X11_FILES} ${MLX_FILE} ${MATH_FILE}
+ADD_LIBS		= ${X11_FILES} ${MATH_FILE} ${MLX_FILE}
+
+
+LINKER_FLAGS	= -L ${MINILIBX_PATH} ${ADD_LIBS}
 
 
 INCLUDE_LIBFT	= -I ${LIBFT_INC_PATH}
