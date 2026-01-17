@@ -31,7 +31,8 @@ LIBFT_NAME		= ${LIBFT_PATH}${LIBFT_FILE}
 
 
 MINILIBX_PATH	= ${LIB_PATH}minilibx/
-MLX_INC_PATH	= ${MINILIBX_PATH}include/
+MINILIBX_FILE	= libmlx_Linux.a
+MLX_NAME		= ${MINILIBX_PATH}${MINILIBX_FILE}
 
 
 CC				= cc
@@ -60,17 +61,14 @@ CFLAGS			= -Wall -Wextra -Werror
 #                   of minilibx that provide the underlying graphical
 #                   functionality. "-lmlx -lmlx_Linux" are specific to
 #                   minilibx itself
-X11_FILES		= -lXext -lX11
-MATH_FILE		= -lm
-MLX_FILES		= -lmlx -lmlx_Linux
-ADD_LIBS		= ${X11_FILES} ${MATH_FILE} ${MLX_FILES}
+ADD_LIBS		= -lmlx_Linux -lXext -lX11 -lm -lbsd
 
 
 LINKER_FLAGS	= -L ${MINILIBX_PATH} ${ADD_LIBS}
 
 
 INCLUDE_LIBFT	= -I ${LIBFT_INC_PATH}
-INCLUDE_MLX		= -I ${MLX_INC_PATH}
+INCLUDE_MLX		= -I ${MINILIBX_PATH}
 INCLUDE			= -I ${INC_PATH} ${INCLUDE_LIBFT} ${INCLUDE_MLX}
 
 
@@ -131,7 +129,7 @@ ${OBJ_PATH}%.o: ${SRC_PATH}%.c
 	@${CC} ${CFLAGS} ${INCLUDE} -c $< -o $@
 
 
-${NAME}: ${LIBFT_NAME} ${OBJ_FILES}
+${NAME}: ${LIBFT_NAME} ${MLX_NAME} ${OBJ_FILES}
 	@${CC} ${CFLAGS} ${OBJ_FILES} ${LIBFT_NAME} -o ${NAME} ${LINKER_FLAGS}
 	@echo "The program \"${NAME}\" has been compiled."
 
@@ -151,7 +149,7 @@ fclean: ${LIB_CLEAN} ${LIB_DELETE} clean
 re: fclean all
 
 
-sanitize: ${LIBFT_NAME} ${OBJ_FILES}
+sanitize: ${LIBFT_NAME} ${MLX_NAME} ${OBJ_FILES}
 	@${CC} ${CFLAGS} ${SANITIZE_FLAGS} ${OBJ_FILES} ${LIBFT_NAME} -o ${NAME} ${LINKER_FLAGS}
 	@echo "C compiler's sanitizer has been added to debug memory issues."
 
@@ -179,6 +177,10 @@ help:
 # #############
 
 
+${MLX_NAME}:
+	@make -sC ${MINILIBX_PATH}
+
+
 ${LIBFT_NAME}:
 	@make -sC ${LIBFT_PATH}
 
@@ -189,10 +191,12 @@ ${LIB_DELETE}:
 
 ${LIB_CLEAN}:
 	@make -sC ${LIBFT_PATH} clean
+	@make -sC ${MINILIBX_PATH} clean
 
 
 ${LIB_FCLEAN}:
 	@make -sC ${LIBFT_PATH} fclean
+	@make -sC ${MINILIBX_PATH} clean
 
 
 ${LIB_RE}:
