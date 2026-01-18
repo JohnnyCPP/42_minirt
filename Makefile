@@ -61,7 +61,7 @@ CFLAGS			= -Wall -Wextra -Werror
 #                   of minilibx that provide the underlying graphical
 #                   functionality. "-lmlx -lmlx_Linux" are specific to
 #                   minilibx itself
-ADD_LIBS		= -lmlx_Linux -lXext -lX11 -lm -lbsd
+ADD_LIBS		= -lmlx_Linux -lXext -lX11 -lm
 
 
 LINKER_FLAGS	= -L ${MINILIBX_PATH} ${ADD_LIBS}
@@ -94,7 +94,10 @@ DEBUG_PHONY		= sanitize valgrind gdb
 LIB_PHONY		= ${LIB_DELETE} ${LIB_CLEAN} ${LIB_FCLEAN} ${LIB_RE}
 
 
-ROOT_SRC_FILES	= rt_main.c
+ROOT_SRC_FILES	= rt_main.c \
+				  rt_window.c \
+				  rt_events.c \
+				  rt_image.c
 ROOT_SRCS		= $(addprefix ${SRC_PATH}, ${ROOT_SRC_FILES})
 SRC_FILES		= ${ROOT_SRCS}
 

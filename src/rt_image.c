@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt_structures.h                                :+:      :+:    :+:   */
+/*   rt_image.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cat <cat@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#             */
-/*   Updated: 2026/01/18 20:57:43 by cat              ###   ########.fr       */
+/*   Created: 2026/01/18 13:05:07 by igenez-y          #+#    #+#             */
+/*   Updated: 2026/01/18 21:01:32 by cat              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_STRUCTURES_H
-# define MINIRT_STRUCTURES_H
+#include "minirt.h"
 
-typedef struct s_img
+void	img_pixel_put(t_img *img, int x, int y, int color)
 {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_img;
+	char	*dst;
 
-typedef struct s_data
-{
-	void	*mlx;
-	void	*win;
-	t_img	img;
-}	t_data;
-
-#endif
+	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
+		return ;
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
+}

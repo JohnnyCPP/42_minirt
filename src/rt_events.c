@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt_prototypes.h                                :+:      :+:    :+:   */
+/*   rt_events.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
@@ -9,18 +9,21 @@
 /*   Updated: 2025/12/17 02:49:28 by jonnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef MINIRT_PROTOTYPES_H
-# define MINIRT_PROTOTYPES_H
+#include "minirt.h"
 
-// Window management
-int		init_window(t_data *data);
-void	cleanup(t_data *data);
+int	handle_keypress(int keycode, t_data *data)
+{
+	if (keycode == KEY_ESC)
+	{
+		cleanup(data);
+		exit(EXIT_SUCCESS);
+	}
+	return (0);
+}
 
-// Event handlers
-int		handle_keypress(int keycode, t_data *data);
-int		handle_close(t_data *data);
-
-// Image utilities
-void	img_pixel_put(t_img *img, int x, int y, int color);
-
-#endif
+int	handle_close(t_data *data)
+{
+	cleanup(data);
+	exit(EXIT_SUCCESS);
+	return (0);
+}
