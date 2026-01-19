@@ -22,6 +22,8 @@ INC_PATH		= ./include/
 OBJ_PATH		= ./object/
 SRC_PATH	    = ./src/
 LIB_PATH		= ./lib/
+REND_PATH		= ${SRC_PATH}rendering/
+EVENT_PATH		= ${SRC_PATH}event/
 
 
 LIBFT_PATH		= ${LIB_PATH}libft/
@@ -94,12 +96,17 @@ DEBUG_PHONY		= sanitize valgrind gdb
 LIB_PHONY		= ${LIB_DELETE} ${LIB_CLEAN} ${LIB_FCLEAN} ${LIB_RE}
 
 
-ROOT_SRC_FILES	= rt_main.c \
-				  rt_window.c \
-				  rt_events.c \
-				  rt_image.c
+ROOT_SRC_FILES	=	rt_main.c
+REND_SRC_FILES	=	rt_destroy.c \
+					rt_init.c \
+					rt_put_pxl.c
+EVENT_SRC_FILES	=	rt_handlers.c
 ROOT_SRCS		= $(addprefix ${SRC_PATH}, ${ROOT_SRC_FILES})
-SRC_FILES		= ${ROOT_SRCS}
+REND_SRCS		= $(addprefix ${REND_PATH}, ${REND_SRC_FILES})
+EVENT_SRCS		= $(addprefix ${EVENT_PATH}, ${EVENT_SRC_FILES})
+SRC_FILES		=	${ROOT_SRCS} \
+					${REND_SRCS} \
+					${EVENT_SRCS}
 
 
 # "patsubst": pattern substitution

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_events.c                                        :+:      :+:    :+:   */
+/*   rt_handlers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
@@ -11,19 +11,19 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
-int	handle_keypress(int keycode, t_data *data)
+int	rt_h_kpress(int keycode, t_data *data)
 {
 	if (keycode == KEY_ESC)
 	{
-		cleanup(data);
+		rt_destroy(data);
 		exit(EXIT_SUCCESS);
 	}
 	return (0);
 }
 
-int	handle_close(t_data *data)
+int	rt_h_close(t_data *data)
 {
-	cleanup(data);
+	rt_destroy(data);
 	exit(EXIT_SUCCESS);
 	return (0);
 }

@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minirt_structures.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cat <cat@student.42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#             */
-/*   Updated: 2026/01/18 20:57:43 by cat              ###   ########.fr       */
+/*   Updated: 2025/12/17 02:49:28 by jonnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #ifndef MINIRT_STRUCTURES_H
 # define MINIRT_STRUCTURES_H
 

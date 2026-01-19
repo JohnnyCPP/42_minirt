@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_window.c                                        :+:      :+:    :+:   */
+/*   rt_destroy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
@@ -11,32 +11,7 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
-int	init_window(t_data *data)
-{
-	data->mlx = mlx_init();
-	if (!data->mlx)
-		return (EXIT_ERROR);
-	data->win = mlx_new_window(data->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE);
-	if (!data->win)
-	{
-		free(data->mlx);
-		return (EXIT_ERROR);
-	}
-	data->img.img = mlx_new_image(data->mlx, WIN_WIDTH, WIN_HEIGHT);
-	if (!data->img.img)
-	{
-		mlx_destroy_window(data->mlx, data->win);
-		free(data->mlx);
-		return (EXIT_ERROR);
-	}
-	data->img.addr = mlx_get_data_addr(data->img.img,
-			&data->img.bits_per_pixel,
-			&data->img.line_length,
-			&data->img.endian);
-	return (EXIT_SUCCESS);
-}
-
-void	cleanup(t_data *data)
+void	rt_destroy(t_data *data)
 {
 	if (data->img.img)
 		mlx_destroy_image(data->mlx, data->img.img);

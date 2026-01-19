@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
+/*   rt_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
@@ -9,32 +9,29 @@
 /*   Updated: 2025/12/17 02:49:28 by jonnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "minirt.h"
 
-/**
- * @file minirt.h
- * @brief Contains function declarations for minirt.
- *
- * Implementation of a ray tracer coded in C. 
- *
- * @author jonnavar & igenez-y
- * @version cat-1.0
- */
-
-#ifndef MINIRT_H
-# define MINIRT_H
-
-//	adds X Events and X Masks
-# include <X11/X.h>
-//	adds keysymbols to map to, when KeyPress events are fired
-# include <X11/keysym.h>
-# include <mlx.h>
-
-# include <stdio.h>
-# include <math.h>
-# include "libft.h"
-# include "minirt_constants.h"
-# include "minirt_structures.h"
-# include "minirt_prototypes.h"
-# include "minirt_long_prototypes.h"
-
-#endif
+int	rt_init(t_data *data)
+{
+	data->mlx = mlx_init();
+	if (!data->mlx)
+		return (EXIT_ERROR);
+	data->win = mlx_new_window(data->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE);
+	if (!data->win)
+	{
+		free(data->mlx);
+		return (EXIT_ERROR);
+	}
+	data->img.img = mlx_new_image(data->mlx, WIN_WIDTH, WIN_HEIGHT);
+	if (!data->img.img)
+	{
+		mlx_destroy_window(data->mlx, data->win);
+		free(data->mlx);
+		return (EXIT_ERROR);
+	}
+	data->img.addr = mlx_get_data_addr(data->img.img,
+			&data->img.bits_per_pixel,
+			&data->img.line_length,
+			&data->img.endian);
+	return (EXIT_SUCCESS);
+}
