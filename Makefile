@@ -6,7 +6,7 @@
 #    By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+         #
 #        igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#              #
-#    Updated: 2025/12/16 17:17:22 by jonnavar         ###   ########.fr        #
+#    Updated: 2026/01/27 17:17:00 by igenez-y         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC_PATH	    = ./src/
 LIB_PATH		= ./lib/
 REND_PATH		= ${SRC_PATH}rendering/
 EVENT_PATH		= ${SRC_PATH}event/
+PARSE_PATH		= ${SRC_PATH}parsing/
 
 
 LIBFT_PATH		= ${LIB_PATH}libft/
@@ -101,12 +102,28 @@ REND_SRC_FILES	=	rt_destroy.c \
 					rt_init.c \
 					rt_put_pxl.c
 EVENT_SRC_FILES	=	rt_handlers.c
+PARSE_SRC_FILES	=	mr_parse_file.c \
+					mr_parse_line.c \
+					mr_parse_ambient.c \
+					mr_parse_camera.c \
+					mr_parse_light.c \
+					mr_parse_sphere.c \
+					mr_parse_plane.c \
+					mr_parse_cylinder.c \
+					mr_parse_utils.c \
+					mr_parse_validate.c \
+					mr_add_object.c \
+					mr_error.c \
+					mr_utils.c \
+					mr_tokenize.c
 ROOT_SRCS		= $(addprefix ${SRC_PATH}, ${ROOT_SRC_FILES})
 REND_SRCS		= $(addprefix ${REND_PATH}, ${REND_SRC_FILES})
 EVENT_SRCS		= $(addprefix ${EVENT_PATH}, ${EVENT_SRC_FILES})
+PARSE_SRCS		= $(addprefix ${PARSE_PATH}, ${PARSE_SRC_FILES})
 SRC_FILES		=	${ROOT_SRCS} \
 					${REND_SRCS} \
-					${EVENT_SRCS}
+					${EVENT_SRCS} \
+					${PARSE_SRCS}
 
 
 # "patsubst": pattern substitution

@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_handlers.c                                      :+:      :+:    :+:   */
+/*   mr_parse_cylinder.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#             */
-/*   Updated: 2025/12/17 02:49:28 by jonnavar         ###   ########.fr       */
+/*   Created: 2026/01/20 10:03:00 by igenez-y          #+#    #+#             */
+/*   Updated: 2026/01/26 02:49:28 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minirt.h"
 
-int	rt_h_kpress(int keycode, t_data *data)
+static int	mr_validate_cylinder_data(t_cylinder *cyl)
 {
-	if (keycode == KEY_ESC)
-	{
-		mr_free_scene(&data->scene);
-		rt_destroy(data);
-		exit(EXIT_SUCCESS);
-	}
-	return (0);
+	//to be implemented
 }
 
-int	rt_h_close(t_data *data)
+int	mr_parse_cylinder(char **tokens, t_cylinder *cyl)
 {
-	mr_free_scene(&data->scene);
-	rt_destroy(data);
-	exit(EXIT_SUCCESS);
-	return (0);
+	//to be implemented
 }

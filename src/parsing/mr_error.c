@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_handlers.c                                      :+:      :+:    :+:   */
+/*   mr_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#             */
-/*   Updated: 2025/12/17 02:49:28 by jonnavar         ###   ########.fr       */
+/*   Created: 2026/01/26 00:00:00 by igenez-y          #+#    #+#             */
+/*   Updated: 2026/01/27 00:00:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minirt.h"
 
-int	rt_h_kpress(int keycode, t_data *data)
+int	mr_error(char *message)
 {
-	if (keycode == KEY_ESC)
-	{
-		mr_free_scene(&data->scene);
-		rt_destroy(data);
-		exit(EXIT_SUCCESS);
-	}
+	ft_putstr_fd("Error\n", 2);
+	if (message)
+		ft_putendl_fd(message, 2);
 	return (0);
 }
 
-int	rt_h_close(t_data *data)
+void	mr_free_scene(t_scene *scene)
 {
-	mr_free_scene(&data->scene);
-	rt_destroy(data);
-	exit(EXIT_SUCCESS);
-	return (0);
+	if (!scene)
+		return ;
+	if (scene->objects.spheres)
+		free(scene->objects.spheres);
+	if (scene->objects.planes)
+		free(scene->objects.planes);
+	if (scene->objects.cylinders)
+		free(scene->objects.cylinders);
+	ft_bzero(scene, sizeof(t_scene));
 }

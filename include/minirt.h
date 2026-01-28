@@ -6,7 +6,7 @@
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#             */
-/*   Updated: 2025/12/17 02:49:28 by jonnavar         ###   ########.fr       */
+/*   Updated: 2026/01/24 18:00:00 by igenez-y        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 
 # include <stdio.h>
 # include <math.h>
+# include <fcntl.h>
 # include "libft.h"
 # include "minirt_constants.h"
 # include "minirt_structures.h"

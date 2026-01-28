@@ -36,11 +36,17 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	(void)argc;
-	(void)argv;
+	if (argc != 2)
+	{
+		ft_putendl_fd("Error\nUsage: ./miniRT <scene.rt>", 2);
+		return (EXIT_ERROR);
+	}
+	if (!mr_parse_file(argv[1], &data.scene))
+		return (EXIT_ERROR);
 	if (rt_init(&data) == EXIT_ERROR)
 	{
 		ft_putendl_fd("Error: Failed to initialize window", 2);
+		mr_free_scene(&data.scene);
 		return (EXIT_ERROR);
 	}
 	rt_test_pattern(&data);
