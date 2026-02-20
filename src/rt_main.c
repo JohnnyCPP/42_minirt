@@ -13,10 +13,12 @@
 
 static void	rt_test_pattern(t_data *data)
 {
-	int	x;
-	int	y;
-	int	color;
+	t_minilib	*mlx;
+	int			x;
+	int			y;
+	int			color;
 
+	mlx = &data->mlx;
 	y = 0;
 	while (y < WIN_HEIGHT)
 	{
@@ -24,17 +26,18 @@ static void	rt_test_pattern(t_data *data)
 		while (x < WIN_WIDTH)
 		{
 			color = (x * 255 / WIN_WIDTH) << 16 | (y * 255 / WIN_HEIGHT) << 8;
-			rt_put_pxl(&data->img, x, y, color);
+			rt_put_pxl(&mlx->img, x, y, color);
 			x++;
 		}
 		y++;
 	}
-	mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
+	mlx_put_image_to_window(mlx->xvar, mlx->win, mlx->img.img, 0, 0);
 }
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
+	void	*window;
 
 	(void)argc;
 	(void)argv;
@@ -44,8 +47,9 @@ int	main(int argc, char **argv)
 		return (EXIT_ERROR);
 	}
 	rt_test_pattern(&data);
-	mlx_hook(data.win, KeyPress, KeyPressMask, rt_h_kpress, &data);
-	mlx_hook(data.win, DestroyNotify, StructureNotifyMask, rt_h_close, &data);
-	mlx_loop(data.mlx);
+	window = &data.mlx.win;
+	mlx_hook(window, KeyPress, KeyPressMask, rt_h_kpress, &data);
+	mlx_hook(window, DestroyNotify, StructureNotifyMask, rt_h_close, &data);
+	mlx_loop(data.mlx.xvar);
 	return (EXIT_SUCCESS);
 }
