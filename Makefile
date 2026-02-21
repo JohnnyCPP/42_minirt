@@ -105,8 +105,15 @@ CAM_SRC_FILES	=	rt_get_camera_axes.c \
 					rt_get_viewport_point.c
 EVENT_SRC_FILES	=	rt_handlers.c
 INTSEC_SRC_FILES	= rt_sphere.c
-MATH_SRC_FILES	=	rt_ray.c \
-					rt_vector.c
+MATH_SRC_FILES	=	rt_add_vector.c \
+					rt_dotprod_of.c \
+					rt_get_mag.c \
+					rt_get_sqmag.c \
+					rt_multiply_vector.c \
+					rt_negate_vector.c \
+					rt_normalize_vector.c \
+					rt_ray.c \
+					rt_subtract_vector.c
 REND_SRC_FILES	=	rt_destroy.c \
 					rt_destroy_scene.c \
 					rt_init.c \
