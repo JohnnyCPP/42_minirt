@@ -12,9 +12,15 @@
 #ifndef MINIRT_PROTOTYPES_H
 # define MINIRT_PROTOTYPES_H
 
+// Testing
+void	rt_mock_spheres(t_scene *scene);
+void	rt_mock_planes(t_scene *scene);
+void	rt_mock_cylinders(t_scene *scene);
+
 // Window management
 int		rt_init(t_data *data);
 void	rt_destroy(t_data *data);
+void	rt_destroy_scene(t_scene *scene);
 
 // Event handlers
 int		rt_h_kpress(int keycode, t_data *data);

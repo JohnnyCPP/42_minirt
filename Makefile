@@ -98,7 +98,9 @@ LIB_PHONY		= ${LIB_DELETE} ${LIB_CLEAN} ${LIB_FCLEAN} ${LIB_RE}
 
 ROOT_SRC_FILES	=	rt_main.c
 REND_SRC_FILES	=	rt_destroy.c \
+					rt_destroy_scene.c \
 					rt_init.c \
+					rt_init_mock.c \
 					rt_put_pxl.c
 EVENT_SRC_FILES	=	rt_handlers.c
 ROOT_SRCS		= $(addprefix ${SRC_PATH}, ${ROOT_SRC_FILES})
