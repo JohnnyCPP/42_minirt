@@ -175,4 +175,14 @@ t_ray	rt_create_ray(t_coordinates origin, t_coordinates direction);
  */
 int		rt_intersect_sphere(t_ray ray, t_sphere *sphere, t_hit *hit);
 
+/**
+ * @brief Creates a ray from camera through a specific pixel.
+ *
+ * @param camera Camera structure
+ * @param x Pixel x coordinate (0 to WIN_WIDTH-1)
+ * @param y Pixel y coordinate (0 to WIN_HEIGHT-1)
+ * @return t_ray Ray from camera through the specified pixel
+ */
+t_ray	rt_get_camera_ray(t_camera *camera, int x, int y);
+
 #endif

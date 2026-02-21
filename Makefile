@@ -22,6 +22,7 @@ INC_PATH		= ./include/
 OBJ_PATH		= ./object/
 SRC_PATH	    = ./src/
 LIB_PATH		= ./lib/
+CAM_PATH		= ${SRC_PATH}camera/
 EVENT_PATH		= ${SRC_PATH}event/
 INTSEC_PATH		= ${SRC_PATH}intersection/
 MATH_PATH		= ${SRC_PATH}math/
@@ -99,6 +100,7 @@ LIB_PHONY		= ${LIB_DELETE} ${LIB_CLEAN} ${LIB_FCLEAN} ${LIB_RE}
 
 
 ROOT_SRC_FILES	=	rt_main.c
+CAM_SRC_FILES	=	rt_camera.c
 EVENT_SRC_FILES	=	rt_handlers.c
 INTSEC_SRC_FILES	= rt_sphere.c
 MATH_SRC_FILES	=	rt_ray.c \
@@ -110,11 +112,13 @@ REND_SRC_FILES	=	rt_destroy.c \
 					rt_put_pxl.c \
 					rt_render.c
 ROOT_SRCS		= $(addprefix ${SRC_PATH}, ${ROOT_SRC_FILES})
+CAM_SRCS		= $(addprefix ${CAM_PATH}, ${CAM_SRC_FILES})
 EVENT_SRCS		= $(addprefix ${EVENT_PATH}, ${EVENT_SRC_FILES})
 INTSEC_SRCS		= $(addprefix ${INTSEC_PATH}, ${INTSEC_SRC_FILES})
 MATH_SRCS		= $(addprefix ${MATH_PATH}, ${MATH_SRC_FILES})
 REND_SRCS		= $(addprefix ${REND_PATH}, ${REND_SRC_FILES})
 SRC_FILES		=	${ROOT_SRCS} \
+					${CAM_SRCS} \
 					${EVENT_SRCS} \
 					${INTSEC_SRCS} \
 					${MATH_SRCS} \

@@ -89,4 +89,59 @@ t_coordinates	rt_negate_vector(t_coordinates v);
  */
 t_coordinates	rt_get_point(t_ray ray, double t);
 
+/**
+ * @brief Converts pixel coordinates to a point on the viewport.
+ *
+ * Parameters x and y are ratios whose values are in range [-1, 1] where:
+ * - (-1, -1) is bottom-left corner
+ * - (1, 1) is top-right corner
+ *
+ * The viewport is placed at distance 1 from camera for simplicity,
+ * then scaled by tan(FOV/2) to account for field of view.
+ */
+t_coordinates	rt_get_viewport_point(t_camera *camera, double x, double y);
+
+/**
+ * @brief Calculates the camera's right vector (X axis) from its orientation.
+ *
+ * Uses the cross product between the world up vector (0,1,0) and the camera's
+ * forward orientation vector to compute a perpendicular vector pointing to
+ * the camera's right side. The result is normalized to unit length.
+ *
+ * The right vector forms the camera's local X axis and is used together with
+ * the up vector to create an orthonormal basis for camera space.
+ *
+ * Example: If camera is looking along +Z (0,0,1), the right vector is (1,0,0)
+ *
+ * Think of a Basis as a coordinate system: A set of reference directions 
+ * that tell you how to measure positions in space.
+ * "orthonormal" combines two concepts:
+ * - Orthogonal (perpendicular): All axes are at 90° angles to each other
+ * - Normal (unit length): Each axis vector has length 1
+ *
+ * @param camera Pointer to camera structure containing orientation
+ * @return t_coordinates Normalized right vector (camera's local X axis)
+ */
+t_coordinates	rt_get_camera_right(t_camera *camera);
+
+/**
+ * @brief Calculates the camera's up vector (Y axis) from its orientation.
+ *
+ * Computes the up vector by taking the cross product of the camera's forward
+ * orientation vector with its right vector. This ensures a consistent
+ * orthonormal basis where the up vector is perpendicular to both forward
+ * and right directions. The result is normalized to unit length.
+ *
+ * The up vector forms the camera's local Y axis and defines which direction
+ * is "up" for the camera. This is used when mapping screen coordinates to
+ * viewport points.
+ *
+ * Example: If camera is looking along +Z (0,0,1) and right is (1,0,0),
+ *          the up vector is (0,1,0)
+ *
+ * @param camera Pointer to camera structure containing orientation
+ * @return t_coordinates Normalized up vector (camera's local Y axis)
+ */
+t_coordinates	rt_get_camera_up(t_camera *camera);
+
 #endif
