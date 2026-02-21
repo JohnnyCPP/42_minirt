@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_camera.c                                        :+:      :+:    :+:   */
+/*   rt_get_camera_axes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
@@ -58,39 +58,4 @@ t_coordinates	rt_get_camera_up(t_camera *camera)
 
 	right = rt_get_camera_right(camera);
 	return (rt_calculate_up(camera->orientation, right));
-}
-
-t_coordinates	rt_get_viewport_point(t_camera *camera, double x, double y)
-{
-	t_coordinates	right;
-	t_coordinates	up;
-	t_coordinates	forward;
-	t_coordinates	result;
-	double			fov_scale;
-
-	right = rt_get_camera_right(camera);
-	up = rt_get_camera_up(camera);
-	forward = rt_normalize_vector(camera->orientation);
-	fov_scale = tan((camera->fov * M_PI / 180.0) / 2.0);
-	result = camera->viewpoint;
-	result = rt_add_vector(result,
-			rt_multiply_vector(right,
-				x * fov_scale * ((double) WIN_WIDTH / WIN_HEIGHT)));
-	result = rt_add_vector(result, rt_multiply_vector(up, y * fov_scale));
-	result = rt_add_vector(result, forward);
-	return (result);
-}
-
-t_ray	rt_get_camera_ray(t_camera *camera, int x, int y)
-{
-	t_coordinates	viewport_point;
-	t_coordinates	ray_direction;
-	double			x_ratio;
-	double			y_ratio;
-
-	x_ratio = (2.0 * (x + 0.5) / WIN_WIDTH) - 1.0;
-	y_ratio = 1.0 - (2.0 * (y + 0.5) / WIN_HEIGHT);
-	viewport_point = rt_get_viewport_point(camera, x_ratio, y_ratio);
-	ray_direction = rt_subtract_vector(viewport_point, camera->viewpoint);
-	return (rt_create_ray(camera->viewpoint, ray_direction));
 }

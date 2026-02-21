@@ -185,4 +185,37 @@ int		rt_intersect_sphere(t_ray ray, t_sphere *sphere, t_hit *hit);
  */
 t_ray	rt_get_camera_ray(t_camera *camera, int x, int y);
 
+/**
+ * @brief Converts a t_color structure to an integer for MLX.
+ *
+ * MLX expects colors in 0x00RRGGBB format (big-endian RGB).
+ *
+ * @param color The color structure with red, green, blue components
+ * @return int Packed color value (0x00RRGGBB)
+ */
+int		rt_get_color_int(t_color color);
+
+/**
+ * @brief Finds the closest sphere intersected by the ray.
+ *
+ * Iterates through all spheres in the scene, tests intersection,
+ * and keeps the closest hit (smallest positive t value).
+ *
+ * @param ray The ray to test
+ * @param scene Scene containing spheres array
+ * @param hit Pointer to hit structure to populate with closest hit info
+ * @return int 1 if any sphere was hit, 0 otherwise
+ */
+int		rt_find_closest_sphere(t_ray ray, t_scene *scene, t_hit *hit);
+
+/**
+ * @brief Renders the entire scene using ray tracing.
+ *
+ * Main render loop that iterates through all pixels, generates camera rays,
+ * finds intersections, computes lighting, and draws pixels.
+ *
+ * @param data Main data structure containing MLX and scene info
+ */
+void	rt_render(t_data *data);
+
 #endif

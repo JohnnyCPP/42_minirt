@@ -100,7 +100,9 @@ LIB_PHONY		= ${LIB_DELETE} ${LIB_CLEAN} ${LIB_FCLEAN} ${LIB_RE}
 
 
 ROOT_SRC_FILES	=	rt_main.c
-CAM_SRC_FILES	=	rt_camera.c
+CAM_SRC_FILES	=	rt_get_camera_axes.c \
+					rt_get_camera_ray.c \
+					rt_get_viewport_point.c
 EVENT_SRC_FILES	=	rt_handlers.c
 INTSEC_SRC_FILES	= rt_sphere.c
 MATH_SRC_FILES	=	rt_ray.c \
