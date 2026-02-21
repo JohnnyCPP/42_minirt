@@ -47,7 +47,7 @@ int	main(int argc, char **argv)
 		return (EXIT_ERROR);
 	}
 	rt_test_pattern(&data);
-	window = &data.mlx.win;
+	window = data.mlx.win;
 	mlx_hook(window, KeyPress, KeyPressMask, rt_h_kpress, &data);
 	mlx_hook(window, DestroyNotify, StructureNotifyMask, rt_h_close, &data);
 	mlx_loop(data.mlx.xvar);
