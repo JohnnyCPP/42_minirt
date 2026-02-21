@@ -92,6 +92,24 @@ static	int	rt_init_scene(t_scene *scene)
 
 int	rt_init(t_data *data)
 {
+	t_ray		ray;
+	t_sphere	sphere;
+	t_hit		hit;
+
+	ray = rt_create_ray(
+		(t_coordinates){-50, 0, 20},
+		rt_subtract_vector(
+			(t_coordinates){0, 0, 20.6}, 
+			(t_coordinates){-50, 0, 20}));
+	sphere.center = (t_coordinates){0, 0, 20.6};
+	sphere.diameter = 12.6;
+	sphere.color = (t_color){10, 0, 255};
+	if (rt_intersect_sphere(ray, &sphere, &hit))
+		printf("Sphere hit at t = %f, point (%f,%f,%f)\n",
+		hit.distance, hit.point.x, hit.point.y, hit.point.z);
+	else
+		printf("Sphere miss\n");
+
 	if (rt_init_mlx(&data->mlx) == EXIT_ERROR)
 		return (EXIT_ERROR);
 	return (rt_init_scene(&data->scene));

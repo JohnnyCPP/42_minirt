@@ -12,21 +12,167 @@
 #ifndef MINIRT_PROTOTYPES_H
 # define MINIRT_PROTOTYPES_H
 
-// Testing
+/**
+ * @brief Initializes mock sphere data for testing before parser implementation.
+ * 
+ * Allocates and configures a single sphere with hardcoded values:
+ * center(0,0,20.6), diameter 12.6, color(10,0,255)
+ * 
+ * @param scene Pointer to scene structure to populate with sphere data
+ */
 void	rt_mock_spheres(t_scene *scene);
+
+/**
+ * @brief Initializes mock plane data for testing before parser implementation.
+ *
+ * Allocates and configures a single plane with hardcoded values:
+ * point(0,0,-10), normal(0,1,0), color(0,0,255)
+ *
+ * @param scene Pointer to scene structure to populate with plane data
+ */
 void	rt_mock_planes(t_scene *scene);
+
+/**
+ * @brief Initializes mock cylinder data 
+ *        for testing before parser implementation.
+ *
+ * Allocates and configures a single cylinder with hardcoded values:
+ * center(0,0,20.6), orientation(0,1,0), 
+ * diameter 12.6, height 12.6, color(10,0,255)
+ *
+ * @param scene Pointer to scene structure to populate with cylinder data
+ */
 void	rt_mock_cylinders(t_scene *scene);
 
-// Window management
+/**
+ * @brief Initializes the MLX library, creates window, and sets up the scene.
+ *
+ * Creates MLX instance, window, and image buffer. Also initializes scene
+ * with hardcoded values for testing.
+ *
+ * @param data Pointer to main data structure containing MLX and scene info
+ * @return int EXIT_SUCCESS on success, EXIT_ERROR on failure
+ */
 int		rt_init(t_data *data);
+
+/**
+ * @brief Cleans up all allocated resources and destroys MLX objects.
+ *
+ * Frees all scene objects (spheres, planes, cylinders), destroys MLX image,
+ * window, display, and frees the MLX instance.
+ *
+ * @param data Pointer to main data structure containing resources to free
+ */
 void	rt_destroy(t_data *data);
+
+/**
+ * @brief Frees all dynamically allocated scene objects.
+ *
+ * Iterates through spheres, planes, and cylinders arrays, freeing each
+ * element and then the array itself.
+ *
+ * @param scene Pointer to scene structure containing object arrays to free
+ */
 void	rt_destroy_scene(t_scene *scene);
 
-// Event handlers
+/**
+ * @brief Handles keyboard press events.
+ * 
+ * Currently only handles ESC key to exit the program cleanly.
+ * 
+ * @param keycode The keycode of the pressed key
+ * @param data Pointer to main data structure
+ * @return int Always returns 0 to indicate event was processed
+ */
 int		rt_h_kpress(int keycode, t_data *data);
+
+/**
+ * @brief Handles window close button (red cross) events.
+ *
+ * Cleans up resources and exits the program when user clicks the close button.
+ *
+ * @param data Pointer to main data structure
+ * @return int Always returns 0 (though function exits before return)
+ */
 int		rt_h_close(t_data *data);
 
-// Image utilities
+/**
+ * @brief Puts a single pixel at (x,y) coordinates in the image buffer.
+ *
+ * Performs bounds checking to ensure pixel is within window dimensions.
+ * Uses MLX's image data addressing to write the color value.
+ *
+ * @param img Pointer to image structure containing buffer info
+ * @param x X coordinate (0 to WIN_WIDTH-1)
+ * @param y Y coordinate (0 to WIN_HEIGHT-1)
+ * @param color RGB color value packed as integer (0x00RRGGBB)
+ */
 void	rt_put_pxl(t_img *img, int x, int y, int color);
+
+/**
+ * @brief Computes the dot product of two vectors.
+ * 
+ * Dot product = v1.x*v2.x + v1.y*v2.y + v1.z*v2.z
+ * Used for projections, angles, and lighting calculations.
+ * 
+ * @param v1 First vector
+ * @param v2 Second vector
+ * @return double Dot product result
+ */
+double	rt_dotprod_of(t_coordinates v1, t_coordinates v2);
+
+/**
+ * @brief Computes the squared magnitude (length squared) of a vector.
+ *
+ * More efficient than rt_get_mag() when comparing distances without needing
+ * the actual distance value, as it avoids the expensive sqrt operation.
+ *
+ * @param v Input vector
+ * @return double Squared magnitude = x² + y² + z²
+ */
+double	rt_get_sqmag(t_coordinates v);
+
+/**
+ * @brief Computes the magnitude (length) of a vector.
+ *
+ * Uses sqrt(rt_get_sqmag(v)). For distance comparisons where exact
+ * distance isn't needed, consider using rt_get_sqmag() for better performance.
+ *
+ * @param v Input vector
+ * @return double Magnitude = √(x² + y² + z²)
+ */
+double	rt_get_mag(t_coordinates v);
+
+/**
+ * @brief Creates a ray from origin point in the specified direction.
+ *
+ * Automatically normalizes the direction vector to ensure unit length,
+ * which simplifies intersection calculations.
+ *
+ * @param origin Starting point of the ray (camera position)
+ * @param direction Direction vector (will be normalized)
+ * @return t_ray Ray structure with origin and normalized direction
+ */
+t_ray	rt_create_ray(t_coordinates origin, t_coordinates direction);
+
+/**
+ * @brief Tests intersection between a ray and a sphere.
+ *
+ * Solves the quadratic equation at² + bt + c = 0 where:
+ * a = D·D (ray direction dot itself, always 1 if normalized)
+ * b = 2 * (O - C)·D
+ * c = (O - C)·(O - C) - r²
+ *
+ * The discriminant determines if/how many intersections occur:
+ * - < 0: No intersection
+ * - = 0: Ray grazes sphere (tangent)
+ * - > 0: Two intersections (entry and exit)
+ *
+ * @param ray The ray to test
+ * @param sphere Pointer to sphere to test against
+ * @param hit Pointer to hit structure to populate on intersection
+ * @return int 1 if intersection occurred (and hit populated), 0 otherwise
+ */
+int		rt_intersect_sphere(t_ray ray, t_sphere *sphere, t_hit *hit);
 
 #endif

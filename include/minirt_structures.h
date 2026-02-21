@@ -45,6 +45,31 @@ typedef struct s_coordinates
 	double	z;
 }	t_coordinates;
 
+typedef struct s_ray
+{
+	t_coordinates	origin;
+	t_coordinates	direction;
+}	t_ray;
+
+typedef struct s_hit
+{
+	int				occurred;
+	double			distance;
+	t_coordinates	point;
+	t_coordinates	normalized;
+	t_color			color;
+}	t_hit;
+
+typedef struct s_quadratic
+{
+	double	a;
+	double	b;
+	double	c;
+	double	t;
+	double	t1;
+	double	t2;
+}	t_quadratic;
+
 /**
  * @member ratio A value in the range [0.0,1.0]. 
  *               Represents how bright it is
