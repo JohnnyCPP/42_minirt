@@ -144,6 +144,8 @@ typedef struct s_cylinder
 	double			diameter;
 	double			height;
 	t_color			color;
+	double			radius;
+	double			half_height;
 }	t_cylinder;
 
 /**

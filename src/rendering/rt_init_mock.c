@@ -30,7 +30,7 @@ void	rt_mock_spheres(t_scene *scene)
 		free(spheres);
 		return ;
 	}
-	spheres[0]->center.x = 0.0;
+	spheres[0]->center.x = -4.0;
 	spheres[0]->center.y = 0.0;
 	spheres[0]->center.z = 20.6;
 	spheres[0]->diameter = 12.6;
@@ -44,14 +44,14 @@ void	rt_mock_spheres(t_scene *scene)
 static	void	rt_assign_planes(t_plane **planes, int amount)
 {
 	planes[0]->point.x = 0.0;
-	planes[0]->point.y = 0.0;
-	planes[0]->point.z = -10.0;
+	planes[0]->point.y = -5.0;
+	planes[0]->point.z = 0.0;
 	planes[0]->orientation.x = 0.0;
 	planes[0]->orientation.y = 1.0;
 	planes[0]->orientation.z = 0.0;
-	planes[0]->color.red = 0;
-	planes[0]->color.green = 0;
-	planes[0]->color.blue = 255;
+	planes[0]->color.red = 100;
+	planes[0]->color.green = 100;
+	planes[0]->color.blue = 100;
 	planes[amount] = NULL;
 }
 
@@ -80,17 +80,19 @@ void	rt_mock_planes(t_scene *scene)
 
 static	void	rt_assign_cylinders(t_cylinder **cylinders, int amount)
 {
-	cylinders[0]->center.x = 0.0;
+	cylinders[0]->center.x = 4.0;
 	cylinders[0]->center.y = 0.0;
-	cylinders[0]->center.z = 20.6;
+	cylinders[0]->center.z = 10.0;
 	cylinders[0]->orientation.x = 0.0;
 	cylinders[0]->orientation.y = 1.0;
 	cylinders[0]->orientation.z = 0.0;
-	cylinders[0]->diameter = 12.6;
-	cylinders[0]->height = 12.6;
-	cylinders[0]->color.red = 10;
-	cylinders[0]->color.green = 0;
-	cylinders[0]->color.blue = 255;
+	cylinders[0]->diameter = 4.0;
+	cylinders[0]->height = 8.0;
+	cylinders[0]->radius = cylinders[0]->diameter / 2.0;
+	cylinders[0]->half_height = cylinders[0]->height / 2.0;
+	cylinders[0]->color.red = 0;
+	cylinders[0]->color.green = 255;
+	cylinders[0]->color.blue = 0;
 	cylinders[amount] = NULL;
 }
 

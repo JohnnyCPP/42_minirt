@@ -72,7 +72,7 @@ static	int	rt_init_scene(t_scene *scene)
 	scene->ambient.color.blue = 255;
 	scene->camera.viewpoint.x = 0;
 	scene->camera.viewpoint.y = 0.0;
-	scene->camera.viewpoint.z = 9.0;
+	scene->camera.viewpoint.z = -2.0;
 	scene->camera.orientation.x = 0.0;
 	scene->camera.orientation.y = 0.0;
 	scene->camera.orientation.z = 1.0;

@@ -16,32 +16,6 @@ int	rt_get_color_int(t_color color)
 	return ((color.red << 16) | (color.green << 8) | color.blue);
 }
 
-int	rt_find_closest_sphere(t_ray ray, t_scene *scene, t_hit *hit)
-{
-	t_hit	aux;
-	int		i;
-	int		hit_occurred;
-
-	i = 0;
-	hit_occurred = 0;
-	hit->distance = INFINITY;
-	if (!scene->spheres)
-		return (0);
-	while (scene->spheres[i] != NULL)
-	{
-		if (rt_intersect_sphere(ray, scene->spheres[i], &aux))
-		{
-			if (aux.distance < hit->distance)
-			{
-				hit_occurred = 1;
-				*hit = aux;
-			}
-		}
-		i ++;
-	}
-	return (hit_occurred);
-}
-
 /**
  * @brief Computes the color for a hit point (ambient only for now).
  *
@@ -84,7 +58,7 @@ void	rt_render(t_data *data)
 		while (x < WIN_WIDTH)
 		{
 			ray = rt_get_camera_ray(&data->scene.camera, x, y);
-			if (rt_find_closest_sphere(ray, &data->scene, &hit))
+			if (rt_find_closest_object(ray, &data->scene, &hit))
 				pixel_color = rt_compute_lighting(&data->scene, hit);
 			else
 				rt_set_background(&pixel_color);

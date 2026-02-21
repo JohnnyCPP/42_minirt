@@ -209,6 +209,45 @@ int		rt_get_color_int(t_color color);
 int		rt_find_closest_sphere(t_ray ray, t_scene *scene, t_hit *hit);
 
 /**
+ * @brief Finds the closest plane intersected by the ray.
+ *
+ * Iterates through all planes in the scene, tests intersection,
+ * and keeps the closest hit (smallest positive t value).
+ *
+ * @param ray The ray to test
+ * @param scene Scene containing planes array
+ * @param hit Pointer to hit structure to populate with closest hit info
+ * @return int 1 if any plane was hit, 0 otherwise
+ */
+int		rt_find_closest_plane(t_ray ray, t_scene *scene, t_hit *hit);
+
+/**
+ * @brief Finds the closest cylinder intersected by the ray.
+ *
+ * Iterates through all cylinders in the scene, tests intersection,
+ * and keeps the closest hit (smallest positive t value).
+ *
+ * @param ray The ray to test
+ * @param scene Scene containing cylinders array
+ * @param hit Pointer to hit structure to populate with closest hit info
+ * @return int 1 if any cylinder was hit, 0 otherwise
+ */
+int		rt_find_closest_cylinder(t_ray ray, t_scene *scene, t_hit *hit);
+
+/**
+ * @brief Finds the closest object (sphere, plane, or cylinder) hit by the ray.
+ *
+ * Tests all object types and keeps the closest intersection (smallest t).
+ * This is the main intersection function called from the render loop.
+ *
+ * @param ray The ray to test
+ * @param scene Scene containing all objects
+ * @param hit Pointer to hit structure to populate with closest hit info
+ * @return int 1 if any object was hit, 0 otherwise
+ */
+int		rt_find_closest_object(t_ray ray, t_scene *scene, t_hit *hit);
+
+/**
  * @brief Renders the entire scene using ray tracing.
  *
  * Main render loop that iterates through all pixels, generates camera rays,
@@ -217,5 +256,32 @@ int		rt_find_closest_sphere(t_ray ray, t_scene *scene, t_hit *hit);
  * @param data Main data structure containing MLX and scene info
  */
 void	rt_render(t_data *data);
+
+/**
+ * @brief Tests intersection between a ray and a plane.
+ *
+ * Solves for t where (O + tD - P0) · n = 0
+ * t = -((O - P0) · n) / (D · n)
+ *
+ * @param ray The ray to test
+ * @param plane Pointer to plane to test against
+ * @param hit Pointer to hit structure to populate on intersection
+ * @return int 1 if intersection occurred (and hit populated), 0 otherwise
+ */
+int		rt_intersect_plane(t_ray ray, t_plane *plane, t_hit *hit);
+
+/**
+ * @brief Tests intersection between a ray and a cylinder.
+ *
+ * Handles both side intersection and cap intersections.
+ * The cylinder is treated as an infinite cylinder first,
+ * then clipped to the finite height.
+ *
+ * @param ray The ray to test
+ * @param cylinder Pointer to cylinder to test against
+ * @param hit Pointer to hit structure to populate on intersection
+ * @return int 1 if intersection occurred (and hit populated), 0 otherwise
+ */
+int		rt_intersect_cylinder(t_ray ray, t_cylinder *cylinder, t_hit *hit);
 
 #endif
