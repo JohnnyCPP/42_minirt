@@ -144,4 +144,6 @@ t_coordinates	rt_get_camera_right(t_camera *camera);
  */
 t_coordinates	rt_get_camera_up(t_camera *camera);
 
+t_coordinates	rt_get_side_normal(t_coordinates point, t_cylinder *cyl);
+
 #endif

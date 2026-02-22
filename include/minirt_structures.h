@@ -171,4 +171,19 @@ typedef struct s_data
 	t_scene		scene;
 }	t_data;
 
+/**
+ * @brief Used during cylinder hit processing to avoid 
+ *        passing more than 4 parameters
+ */
+typedef struct s_side_hit_aux
+{
+	t_ray		ray;
+	t_cylinder	*cylinder;
+	t_ray		local;
+	double		t;
+	double		t1;
+	double		t2;
+	t_hit		*hit;
+}	t_side_hit_aux;
+
 #endif

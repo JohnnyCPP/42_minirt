@@ -284,4 +284,12 @@ int		rt_intersect_plane(t_ray ray, t_plane *plane, t_hit *hit);
  */
 int		rt_intersect_cylinder(t_ray ray, t_cylinder *cylinder, t_hit *hit);
 
+void	rt_transform_ray(t_ray ray, t_cylinder *cyl, t_ray *local_ray);
+
+int		rt_solve_side_quadratic(t_ray local, double r, double *t1, double *t2);
+
+int		rt_within_height(double y, t_cylinder *cyl);
+
+int		rt_intersect_caps(t_ray ray, t_cylinder *cyl, t_hit *hit);
+
 #endif

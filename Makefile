@@ -104,13 +104,18 @@ CAM_SRC_FILES	=	rt_get_camera_axes.c \
 					rt_get_camera_ray.c \
 					rt_get_viewport_point.c
 EVENT_SRC_FILES	=	rt_handlers.c
-INTSEC_SRC_FILES	=	rt_cylinder.c \
-						rt_find_closest_cylinder.c \
+INTSEC_SRC_FILES	=	rt_find_closest_cylinder.c \
 						rt_find_closest_object.c \
 						rt_find_closest_plane.c \
 						rt_find_closest_sphere.c \
+						rt_get_side_normal.c \
+						rt_intersect_caps.c \
+						rt_intersect_cylinder.c \
 						rt_plane.c \
-						rt_sphere.c
+						rt_solve_side_quadratic.c \
+						rt_sphere.c \
+						rt_transform_ray.c \
+						rt_within_height.c
 MATH_SRC_FILES	=	rt_add_vector.c \
 					rt_dotprod_of.c \
 					rt_get_mag.c \
