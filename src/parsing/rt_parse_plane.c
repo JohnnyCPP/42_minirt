@@ -18,11 +18,11 @@ int	rt_parse_plane(char **tokens, t_plane *plane)
 		return (rt_error("Invalid plane format"));
 	if (!rt_parse_vec3(tokens[1], &plane->point))
 		return (rt_error("Invalid plane point"));
-	if (!rt_parse_vec3(tokens[2], &plane->normal))
+	if (!rt_parse_vec3(tokens[2], &plane->orientation))
 		return (rt_error("Invalid plane normal"));
-	if (!rt_check_vec_range(plane->normal, -1.0, 1.0))
+	if (!rt_check_vec_range(plane->orientation, -1.0, 1.0))
 		return (rt_error("Plane normal out of range [-1,1]"));
-	if (!rt_validate_normalized(plane->normal))
+	if (!rt_validate_normalized(plane->orientation))
 		return (rt_error("Plane normal not normalized"));
 	if (!rt_parse_color(tokens[3], &plane->color))
 		return (rt_error("Invalid plane color"));

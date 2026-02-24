@@ -15,7 +15,7 @@ int	rt_h_kpress(int keycode, t_data *data)
 {
 	if (keycode == KEY_ESC)
 	{
-		mr_free_scene(&data->scene);
+		rt_free_scene(&data->scene);
 		rt_destroy(data);
 		exit(EXIT_SUCCESS);
 	}
@@ -24,7 +24,7 @@ int	rt_h_kpress(int keycode, t_data *data)
 
 int	rt_h_close(t_data *data)
 {
-	mr_free_scene(&data->scene);
+	rt_free_scene(&data->scene);
 	rt_destroy(data);
 	exit(EXIT_SUCCESS);
 	return (0);

@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 
-int	rt_validate_normalized(t_vec3 vec)
+int	rt_validate_normalized(t_coordinates vec)
 {
 	double	length;
 
@@ -30,7 +30,7 @@ int	rt_validate_range(double value, double min, double max)
 	return (1);
 }
 
-int	rt_check_vec_range(t_vec3 vec, double min, double max)
+int	rt_check_vec_range(t_coordinates vec, double min, double max)
 {
 	if (!rt_validate_range(vec.x, min, max))
 		return (0);

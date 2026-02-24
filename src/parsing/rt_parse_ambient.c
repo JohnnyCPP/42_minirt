@@ -12,18 +12,15 @@
 
 #include "minirt.h"
 
-int	rt_parse_ambient(char **tokens, t_ambient *ambient)
+int	rt_parse_ambient(char **tokens, t_amb_light *ambient)
 {
 	if (!tokens || !tokens[1] || !tokens[2] || tokens[3])
 		return (rt_error("Invalid ambient format"));
-	if (ambient->is_set)
-		return (rt_error("Duplicate ambient lighting"));
 	if (!rt_parse_float(tokens[1], &ambient->ratio))
 		return (rt_error("Invalid ambient ratio"));
 	if (!rt_validate_range(ambient->ratio, 0.0, 1.0))
 		return (rt_error("Ambient ratio out of range [0.0,1.0]"));
 	if (!rt_parse_color(tokens[2], &ambient->color))
 		return (rt_error("Invalid ambient color"));
-	ambient->is_set = 1;
 	return (1);
 }

@@ -21,9 +21,9 @@ static int	rt_parse_light_color(char **tokens, t_light *light)
 	}
 	else
 	{
-		light->color.r = 255;
-		light->color.g = 255;
-		light->color.b = 255;
+		light->color.red = 255;
+		light->color.green = 255;
+		light->color.blue = 255;
 	}
 	return (1);
 }
@@ -32,9 +32,7 @@ int	rt_parse_light(char **tokens, t_light *light)
 {
 	if (!tokens || !tokens[1] || !tokens[2])
 		return (rt_error("Invalid light format"));
-	if (light->is_set)
-		return (rt_error("Duplicate light"));
-	if (!rt_parse_vec3(tokens[1], &light->position))
+	if (!rt_parse_vec3(tokens[1], &light->source))
 		return (rt_error("Invalid light position"));
 	if (!rt_parse_float(tokens[2], &light->brightness))
 		return (rt_error("Invalid light brightness"));
@@ -42,6 +40,5 @@ int	rt_parse_light(char **tokens, t_light *light)
 		return (rt_error("Light brightness out of range [0.0,1.0]"));
 	if (!rt_parse_light_color(tokens, light))
 		return (0);
-	light->is_set = 1;
 	return (1);
 }

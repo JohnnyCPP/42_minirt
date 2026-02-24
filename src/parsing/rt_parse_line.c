@@ -21,19 +21,19 @@ static int	rt_parse_object(char **tokens, t_scene *scene)
 	{
 		if (!rt_parse_sphere(tokens, &sp))
 			return (0);
-		return (rt_add_sphere(&scene->objects, sp));
+		return (rt_add_sphere(scene, sp));
 	}
 	else if (ft_strcmp(tokens[0], "pl") == 0)
 	{
 		if (!rt_parse_plane(tokens, &pl))
 			return (0);
-		return (rt_add_plane(&scene->objects, pl));
+		return (rt_add_plane(scene, pl));
 	}
 	else if (ft_strcmp(tokens[0], "cy") == 0)
 	{
 		if (!rt_parse_cylinder(tokens, &cy))
 			return (0);
-		return (rt_add_cylinder(&scene->objects, cy));
+		return (rt_add_cylinder(scene, cy));
 	}
 	return (rt_error("Unknown identifier"));
 }

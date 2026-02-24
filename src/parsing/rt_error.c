@@ -22,13 +22,30 @@ int	rt_error(char *message)
 
 void	rt_free_scene(t_scene *scene)
 {
+	int	i;
+
 	if (!scene)
 		return ;
-	if (scene->objects.spheres)
-		free(scene->objects.spheres);
-	if (scene->objects.planes)
-		free(scene->objects.planes);
-	if (scene->objects.cylinders)
-		free(scene->objects.cylinders);
+	i = 0;
+	if (scene->spheres)
+	{
+		while (scene->spheres[i])
+			free(scene->spheres[i++]);
+		free(scene->spheres);
+	}
+	i = 0;
+	if (scene->planes)
+	{
+		while (scene->planes[i])
+			free(scene->planes[i++]);
+		free(scene->planes);
+	}
+	i = 0;
+	if (scene->cylinders)
+	{
+		while (scene->cylinders[i])
+			free(scene->cylinders[i++]);
+		free(scene->cylinders);
+	}
 	ft_bzero(scene, sizeof(t_scene));
 }

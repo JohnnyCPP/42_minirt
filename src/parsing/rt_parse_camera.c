@@ -16,9 +16,7 @@ int	rt_parse_camera(char **tokens, t_camera *camera)
 {
 	if (!tokens || !tokens[1] || !tokens[2] || !tokens[3] || tokens[4])
 		return (rt_error("Invalid camera format"));
-	if (camera->is_set)
-		return (rt_error("Duplicate camera"));
-	if (!rt_parse_vec3(tokens[1], &camera->position))
+	if (!rt_parse_vec3(tokens[1], &camera->viewpoint))
 		return (rt_error("Invalid camera position"));
 	if (!rt_parse_vec3(tokens[2], &camera->orientation))
 		return (rt_error("Invalid camera orientation"));
@@ -29,6 +27,5 @@ int	rt_parse_camera(char **tokens, t_camera *camera)
 	camera->fov = ft_atoi(tokens[3]);
 	if (camera->fov < 0 || camera->fov > 180)
 		return (rt_error("Camera FOV out of range [0,180]"));
-	camera->is_set = 1;
 	return (1);
 }

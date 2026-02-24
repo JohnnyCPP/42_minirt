@@ -11,15 +11,21 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
+static	void	rt_destroy_mlx(t_minilib *mlx)
+{
+	if (mlx->img.img)
+		mlx_destroy_image(mlx->xvar, mlx->img.img);
+	if (mlx->win)
+		mlx_destroy_window(mlx->xvar, mlx->win);
+	if (mlx->xvar)
+	{
+		mlx_destroy_display(mlx->xvar);
+		free(mlx->xvar);
+	}
+}
+
 void	rt_destroy(t_data *data)
 {
-	if (data->img.img)
-		mlx_destroy_image(data->mlx, data->img.img);
-	if (data->win)
-		mlx_destroy_window(data->mlx, data->win);
-	if (data->mlx)
-	{
-		mlx_destroy_display(data->mlx);
-		free(data->mlx);
-	}
+	rt_destroy_mlx(&data->mlx);
+	rt_destroy_scene(&data->scene);
 }

@@ -22,9 +22,12 @@ INC_PATH		= ./include/
 OBJ_PATH		= ./object/
 SRC_PATH	    = ./src/
 LIB_PATH		= ./lib/
-REND_PATH		= ${SRC_PATH}rendering/
+CAM_PATH		= ${SRC_PATH}camera/
 EVENT_PATH		= ${SRC_PATH}event/
 PARSE_PATH		= ${SRC_PATH}parsing/
+INTSEC_PATH		= ${SRC_PATH}intersection/
+MATH_PATH		= ${SRC_PATH}math/
+REND_PATH		= ${SRC_PATH}rendering/
 
 
 LIBFT_PATH		= ${LIB_PATH}libft/
@@ -98,32 +101,65 @@ LIB_PHONY		= ${LIB_DELETE} ${LIB_CLEAN} ${LIB_FCLEAN} ${LIB_RE}
 
 
 ROOT_SRC_FILES	=	rt_main.c
-REND_SRC_FILES	=	rt_destroy.c \
-					rt_init.c \
-					rt_put_pxl.c
+CAM_SRC_FILES	=	rt_get_camera_axes.c \
+					rt_get_camera_ray.c \
+					rt_get_viewport_point.c
 EVENT_SRC_FILES	=	rt_handlers.c
-PARSE_SRC_FILES	=	mr_parse_file.c \
-					mr_parse_line.c \
-					mr_parse_ambient.c \
-					mr_parse_camera.c \
-					mr_parse_light.c \
-					mr_parse_sphere.c \
-					mr_parse_plane.c \
-					mr_parse_cylinder.c \
-					mr_parse_utils.c \
-					mr_parse_validate.c \
-					mr_add_object.c \
-					mr_error.c \
-					mr_utils.c \
-					mr_tokenize.c
+PARSE_SRC_FILES	=	rt_parse_file.c \
+					rt_parse_line.c \
+					rt_parse_ambient.c \
+					rt_parse_camera.c \
+					rt_parse_light.c \
+					rt_parse_sphere.c \
+					rt_parse_plane.c \
+					rt_parse_cylinder.c \
+					rt_parse_utils.c \
+					rt_parse_validate.c \
+					rt_add_object.c \
+					rt_error.c \
+					rt_utils.c \
+					rt_tokenize.c
+INTSEC_SRC_FILES	=	rt_find_closest_cylinder.c \
+						rt_find_closest_object.c \
+						rt_find_closest_plane.c \
+						rt_find_closest_sphere.c \
+						rt_get_side_normal.c \
+						rt_intersect_caps.c \
+						rt_intersect_cylinder.c \
+						rt_plane.c \
+						rt_solve_side_quadratic.c \
+						rt_sphere.c \
+						rt_transform_ray.c \
+						rt_within_height.c
+MATH_SRC_FILES	=	rt_add_vector.c \
+					rt_dotprod_of.c \
+					rt_get_mag.c \
+					rt_get_sqmag.c \
+					rt_multiply_vector.c \
+					rt_negate_vector.c \
+					rt_normalize_vector.c \
+					rt_ray.c \
+					rt_subtract_vector.c
+REND_SRC_FILES	=	rt_destroy.c \
+					rt_destroy_scene.c \
+					rt_init.c \
+					rt_init_mock.c \
+					rt_put_pxl.c \
+					rt_render.c
 ROOT_SRCS		= $(addprefix ${SRC_PATH}, ${ROOT_SRC_FILES})
-REND_SRCS		= $(addprefix ${REND_PATH}, ${REND_SRC_FILES})
+CAM_SRCS		= $(addprefix ${CAM_PATH}, ${CAM_SRC_FILES})
 EVENT_SRCS		= $(addprefix ${EVENT_PATH}, ${EVENT_SRC_FILES})
 PARSE_SRCS		= $(addprefix ${PARSE_PATH}, ${PARSE_SRC_FILES})
+INTSEC_SRCS		= $(addprefix ${INTSEC_PATH}, ${INTSEC_SRC_FILES})
+MATH_SRCS		= $(addprefix ${MATH_PATH}, ${MATH_SRC_FILES})
+REND_SRCS		= $(addprefix ${REND_PATH}, ${REND_SRC_FILES})
 SRC_FILES		=	${ROOT_SRCS} \
-					${REND_SRCS} \
+					${CAM_SRCS} \
 					${EVENT_SRCS} \
-					${PARSE_SRCS}
+					${PARSE_SRCS} \
+					${INTSEC_SRCS} \
+					${MATH_SRCS} \
+					${REND_SRCS}
 
 
 # "patsubst": pattern substitution

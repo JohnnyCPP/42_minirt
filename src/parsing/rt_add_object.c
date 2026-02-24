@@ -12,65 +12,107 @@
 
 #include "minirt.h"
 
-int	rt_add_sphere(t_objects *objs, t_sphere sphere)
+static int	count_objects(void **objects)
 {
-	t_sphere	*new;
+	int	count;
+
+	count = 0;
+	if (!objects)
+		return (0);
+	while (objects[count])
+		count++;
+	return (count);
+}
+
+int	rt_add_sphere(t_scene *scene, t_sphere sphere)
+{
+	t_sphere	**new;
+	t_sphere	*sphere_ptr;
+	int			count;
 	int			i;
 
-	new = malloc(sizeof(t_sphere) * (objs->sphere_count + 1));
+	count = count_objects((void **)scene->spheres);
+	new = malloc(sizeof(t_sphere *) * (count + 2));
 	if (!new)
-		return (rt_error("Failed to allocate sphere"));
-	i = 0;
-	while (i < objs->sphere_count)
+		return (rt_error("Failed to allocate sphere array"));
+	sphere_ptr = malloc(sizeof(t_sphere));
+	if (!sphere_ptr)
 	{
-		new[i] = objs->spheres[i];
+		free(new);
+		return (rt_error("Failed to allocate sphere"));
+	}
+	*sphere_ptr = sphere;
+	i = 0;
+	while (i < count)
+	{
+		new[i] = scene->spheres[i];
 		i++;
 	}
-	new[i] = sphere;
-	free(objs->spheres);
-	objs->spheres = new;
-	objs->sphere_count++;
+	new[i] = sphere_ptr;
+	new[i + 1] = NULL;
+	free(scene->spheres);
+	scene->spheres = new;
 	return (1);
 }
 
-int	rt_add_plane(t_objects *objs, t_plane plane)
+int	rt_add_plane(t_scene *scene, t_plane plane)
 {
-	t_plane	*new;
+	t_plane	**new;
+	t_plane	*plane_ptr;
+	int		count;
 	int		i;
 
-	new = malloc(sizeof(t_plane) * (objs->plane_count + 1));
+	count = count_objects((void **)scene->planes);
+	new = malloc(sizeof(t_plane *) * (count + 2));
 	if (!new)
-		return (rt_error("Failed to allocate plane"));
-	i = 0;
-	while (i < objs->plane_count)
+		return (rt_error("Failed to allocate plane array"));
+	plane_ptr = malloc(sizeof(t_plane));
+	if (!plane_ptr)
 	{
-		new[i] = objs->planes[i];
+		free(new);
+		return (rt_error("Failed to allocate plane"));
+	}
+	*plane_ptr = plane;
+	i = 0;
+	while (i < count)
+	{
+		new[i] = scene->planes[i];
 		i++;
 	}
-	new[i] = plane;
-	free(objs->planes);
-	objs->planes = new;
-	objs->plane_count++;
+	new[i] = plane_ptr;
+	new[i + 1] = NULL;
+	free(scene->planes);
+	scene->planes = new;
 	return (1);
 }
 
-int	rt_add_cylinder(t_objects *objs, t_cylinder cyl)
+int	rt_add_cylinder(t_scene *scene, t_cylinder cyl)
 {
-	t_cylinder	*new;
+	t_cylinder	**new;
+	t_cylinder	*cyl_ptr;
+	int			count;
 	int			i;
 
-	new = malloc(sizeof(t_cylinder) * (objs->cylinder_count + 1));
+	count = count_objects((void **)scene->cylinders);
+	new = malloc(sizeof(t_cylinder *) * (count + 2));
 	if (!new)
-		return (mr_error("Failed to allocate cylinder"));
-	i = 0;
-	while (i < objs->cylinder_count)
+		return (rt_error("Failed to allocate cylinder array"));
+	cyl_ptr = malloc(sizeof(t_cylinder));
+	if (!cyl_ptr)
 	{
-		new[i] = objs->cylinders[i];
+		free(new);
+		return (rt_error("Failed to allocate cylinder"));
+	}
+	*cyl_ptr = cyl;
+	i = 0;
+	while (i < count)
+	{
+		new[i] = scene->cylinders[i];
 		i++;
 	}
-	new[i] = cyl;
-	free(objs->cylinders);
-	objs->cylinders = new;
-	objs->cylinder_count++;
+	new[i] = cyl_ptr;
+	new[i + 1] = NULL;
+	free(scene->cylinders);
+	scene->cylinders = new;
 	return (1);
 }

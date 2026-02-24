@@ -26,7 +26,7 @@ int	rt_parse_float(char *str, double *result)
 	return (1);
 }
 
-int	rt_parse_vec3(char *str, t_vec3 *vec)
+int	rt_parse_vec3(char *str, t_coordinates *vec)
 {
 	char	**parts;
 	int		ret;
@@ -67,8 +67,8 @@ int	rt_parse_color(char *str, t_color *color)
 	rt_free_split(parts);
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
 		return (0);
-	color->r = r;
-	color->g = g;
-	color->b = b;
+	color->red = r;
+	color->green = g;
+	color->blue = b;
 	return (1);
 }
