@@ -6,7 +6,7 @@
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#             */
-/*   Updated: 2025/12/17 02:49:28 by jonnavar         ###   ########.fr       */
+/*   Updated: 2025/02/24 14:00:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minirt.h"
@@ -64,7 +64,8 @@ static	int	rt_init_mlx(t_minilib *mlx)
  *         - camera
  *         - light
  */
-static	int	rt_init_scene(t_scene *scene)
+
+/*static	int	rt_init_scene(t_scene *scene)
 {
 	scene->ambient.ratio = 0.2;
 	scene->ambient.color.red = 255;
@@ -88,11 +89,11 @@ static	int	rt_init_scene(t_scene *scene)
 	rt_mock_planes(scene);
 	rt_mock_cylinders(scene);
 	return (EXIT_SUCCESS);
-}
+}*/
 
 int	rt_init(t_data *data)
 {
 	if (rt_init_mlx(&data->mlx) == EXIT_ERROR)
 		return (EXIT_ERROR);
-	return (rt_init_scene(&data->scene));
+	return (EXIT_SUCCESS);
 }

@@ -23,7 +23,8 @@ int	rt_parse_camera(char **tokens, t_camera *camera)
 	if (!rt_check_vec_range(camera->orientation, -1.0, 1.0))
 		return (rt_error("Camera orientation out of range [-1,1]"));
 	if (!rt_validate_normalized(camera->orientation))
-		return (rt_error("Camera orientation not normalized"));
+		return (rt_error("Camera orientation is zero vector"));
+	camera->orientation = rt_normalize_vector(camera->orientation);
 	camera->fov = ft_atoi(tokens[3]);
 	if (camera->fov < 0 || camera->fov > 180)
 		return (rt_error("Camera FOV out of range [0,180]"));

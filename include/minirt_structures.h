@@ -6,7 +6,7 @@
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#             */
-/*   Updated: 2026/01/24 18:00:00 by igenez-y         ###   ########.fr       */
+/*   Updated: 2026/02/24 12:00:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef MINIRT_STRUCTURES_H
@@ -159,6 +159,9 @@ typedef struct s_scene
 	t_sphere	**spheres;
 	t_plane		**planes;
 	t_cylinder	**cylinders;
+	int			has_ambient;
+	int			has_camera;
+	int			has_light;
 }	t_scene;
 
 /**

@@ -23,7 +23,8 @@ int	rt_parse_plane(char **tokens, t_plane *plane)
 	if (!rt_check_vec_range(plane->orientation, -1.0, 1.0))
 		return (rt_error("Plane normal out of range [-1,1]"));
 	if (!rt_validate_normalized(plane->orientation))
-		return (rt_error("Plane normal not normalized"));
+		return (rt_error("Plane normal is zero vector"));
+	plane->orientation = rt_normalize_vector(plane->orientation);
 	if (!rt_parse_color(tokens[3], &plane->color))
 		return (rt_error("Invalid plane color"));
 	return (1);

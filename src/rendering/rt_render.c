@@ -6,7 +6,7 @@
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 13:05:07 by igenez-y          #+#    #+#             */
-/*   Updated: 2026/01/18 21:01:32 by jonnavar         ###   ########.fr       */
+/*   Updated: 2026/02/24 12:10:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minirt.h"
@@ -16,7 +16,8 @@ int	rt_get_color_int(t_color color)
 	return ((color.red << 16) | (color.green << 8) | color.blue);
 }
 
-/**
+
+/*
  * @brief Computes the color for a hit point (ambient only for now).
  *
  * Currently implements only ambient lighting as per mandatory part:
@@ -26,7 +27,9 @@ int	rt_get_color_int(t_color color)
  * @param hit Hit point information
  * @return t_color Final color after lighting calculations
  */
-static	t_color	rt_compute_lighting(t_scene *scene, t_hit hit)
+
+
+/* static	t_color	rt_compute_lighting(t_scene *scene, t_hit hit)
 {
 	t_color	result;
 
@@ -34,7 +37,7 @@ static	t_color	rt_compute_lighting(t_scene *scene, t_hit hit)
 	result.green = (int)(hit.color.green * scene->ambient.ratio);
 	result.blue = (int)(hit.color.blue * scene->ambient.ratio);
 	return (result);
-}
+}*/
 
 static	void	rt_set_background(t_color *color)
 {

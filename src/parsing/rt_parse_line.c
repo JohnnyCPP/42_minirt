@@ -1,13 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rt_parse_file.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
+/*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/20 10:03:00 by igenez-y          #+#    #+#             */
+/*   Updated: 2026/02/24 10:34:00 by igenez-y         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static int	rt_parse_element(char **tokens, t_scene *scene)
 {
 	if (ft_strcmp(tokens[0], "A") == 0)
+	{
+		if (scene->has_ambient)
+			return (rt_error("Duplicate ambient lighting"));
+		scene->has_ambient = 1;
 		return (rt_parse_ambient(tokens, &scene->ambient));
+	}
 	else if (ft_strcmp(tokens[0], "C") == 0)
+	{
+		if (scene->has_camera)
+			return (rt_error("Duplicate camera"));
+		scene->has_camera = 1;
 		return (rt_parse_camera(tokens, &scene->camera));
+	}
 	else if (ft_strcmp(tokens[0], "L") == 0)
+	{
+		if (scene->has_light)
+			return (rt_error("Duplicate light"));
+		scene->has_light = 1;
 		return (rt_parse_light(tokens, &scene->light));
+	}
 	return (-1);
 }
 

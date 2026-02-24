@@ -17,7 +17,7 @@ int	rt_validate_normalized(t_coordinates vec)
 	double	length;
 
 	length = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
-	if (length < 0.99 || length > 1.01)
+	if (length < EPSILON_INTSEC)
 		return (0);
 	return (1);
 

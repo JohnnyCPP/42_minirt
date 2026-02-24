@@ -144,6 +144,7 @@ REND_SRC_FILES	=	rt_destroy.c \
 					rt_destroy_scene.c \
 					rt_init.c \
 					rt_init_mock.c \
+					rt_lighting.c \
 					rt_put_pxl.c \
 					rt_render.c
 ROOT_SRCS		= $(addprefix ${SRC_PATH}, ${ROOT_SRC_FILES})

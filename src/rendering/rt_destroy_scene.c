@@ -15,6 +15,8 @@ static	void	rt_destroy_spheres(t_scene *scene)
 {
 	int	i;
 
+	if (!scene->spheres)
+		return ;
 	i = 0;
 	while (scene->spheres[i] != NULL)
 	{
@@ -22,17 +24,16 @@ static	void	rt_destroy_spheres(t_scene *scene)
 		scene->spheres[i] = NULL;
 		i ++;
 	}
-	if (scene->spheres != NULL)
-	{
-		free(scene->spheres);
-		scene->spheres = NULL;
-	}
+	free(scene->spheres);
+	scene->spheres = NULL;
 }
 
 static	void	rt_destroy_planes(t_scene *scene)
 {
 	int	i;
 
+	if (!scene->planes)
+		return ;
 	i = 0;
 	while (scene->planes[i] != NULL)
 	{
@@ -40,17 +41,16 @@ static	void	rt_destroy_planes(t_scene *scene)
 		scene->planes[i] = NULL;
 		i ++;
 	}
-	if (scene->planes != NULL)
-	{
-		free(scene->planes);
-		scene->planes = NULL;
-	}
+	free(scene->planes);
+	scene->planes = NULL;
 }
 
 static	void	rt_destroy_cylinders(t_scene *scene)
 {
 	int	i;
 
+	if (!scene->cylinders)
+		return ;
 	i = 0;
 	while (scene->cylinders[i] != NULL)
 	{
@@ -58,11 +58,8 @@ static	void	rt_destroy_cylinders(t_scene *scene)
 		scene->cylinders[i] = NULL;
 		i ++;
 	}
-	if (scene->cylinders != NULL)
-	{
-		free(scene->cylinders);
-		scene->cylinders = NULL;
-	}
+	free(scene->cylinders);
+	scene->cylinders = NULL;
 }
 
 void	rt_destroy_scene(t_scene *scene)

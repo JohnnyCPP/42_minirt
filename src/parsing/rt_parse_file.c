@@ -6,7 +6,7 @@
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 10:03:00 by igenez-y          #+#    #+#             */
-/*   Updated: 2026/01/23 10:00:00 by igenez-y         ###   ########.fr       */
+/*   Updated: 2026/02/24 10:00:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,12 @@ static int	rt_check_extension(char *filename)
 
 static int	rt_validate_scene(t_scene *scene)
 {
-	(void)scene;
-	// Basic validation - can be extended
+	if (!scene->has_ambient)
+		return (rt_error("Missing ambient lighting (A)"));
+	if (!scene->has_camera)
+		return (rt_error("Missing camera (C)"));
+	if (!scene->has_light)
+		return (rt_error("Missing light (L)"));
 	return (1);
 }
 
