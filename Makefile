@@ -118,13 +118,14 @@ INTSEC_SRC_FILES	=	rt_find_closest_cylinder.c \
 						rt_transform_ray.c \
 						rt_within_height.c
 MATH_SRC_FILES	=	rt_add_vector.c \
+					rt_create_ray.c \
 					rt_dotprod_of.c \
 					rt_get_mag.c \
+					rt_get_point.c \
 					rt_get_sqmag.c \
 					rt_multiply_vector.c \
 					rt_negate_vector.c \
 					rt_normalize_vector.c \
-					rt_ray.c \
 					rt_subtract_vector.c
 PARSE_SRC_FILES	=	rt_add_cylinder.c \
 					rt_add_plane.c \

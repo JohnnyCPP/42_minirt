@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_ray.c                                           :+:      :+:    :+:   */
+/*   rt_create_ray.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
@@ -18,14 +18,4 @@ t_ray	rt_create_ray(t_coordinates origin, t_coordinates direction)
 	ray.origin = origin;
 	ray.direction = rt_normalize_vector(direction);
 	return (ray);
-}
-
-t_coordinates	rt_get_point(t_ray ray, double t)
-{
-	t_coordinates	product;
-	t_coordinates	addition;
-
-	product = rt_multiply_vector(ray.direction, t);
-	addition = rt_add_vector(ray.origin, product);
-	return (addition);
 }
