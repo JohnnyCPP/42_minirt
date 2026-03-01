@@ -105,20 +105,6 @@ CAM_SRC_FILES	=	rt_get_camera_axes.c \
 					rt_get_camera_ray.c \
 					rt_get_viewport_point.c
 EVENT_SRC_FILES	=	rt_handlers.c
-PARSE_SRC_FILES	=	rt_parse_file.c \
-					rt_parse_line.c \
-					rt_parse_ambient.c \
-					rt_parse_camera.c \
-					rt_parse_light.c \
-					rt_parse_sphere.c \
-					rt_parse_plane.c \
-					rt_parse_cylinder.c \
-					rt_parse_utils.c \
-					rt_parse_validate.c \
-					rt_add_object.c \
-					rt_error.c \
-					rt_utils.c \
-					rt_tokenize.c
 INTSEC_SRC_FILES	=	rt_find_closest_cylinder.c \
 						rt_find_closest_object.c \
 						rt_find_closest_plane.c \
@@ -140,6 +126,22 @@ MATH_SRC_FILES	=	rt_add_vector.c \
 					rt_normalize_vector.c \
 					rt_ray.c \
 					rt_subtract_vector.c
+PARSE_SRC_FILES	=	rt_add_cylinder.c \
+					rt_add_plane.c \
+					rt_add_sphere.c \
+					rt_error.c \
+					rt_parse_ambient.c \
+					rt_parse_camera.c \
+					rt_parse_cylinder.c \
+					rt_parse_file.c \
+					rt_parse_light.c \
+					rt_parse_line.c \
+					rt_parse_plane.c \
+					rt_parse_sphere.c \
+					rt_parse_utils.c \
+					rt_parse_validate.c \
+					rt_tokenize.c \
+					rt_utils.c
 REND_SRC_FILES	=	rt_destroy.c \
 					rt_destroy_scene.c \
 					rt_init.c \

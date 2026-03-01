@@ -20,26 +20,10 @@ int	rt_error(char *message)
 	return (0);
 }
 
-void	rt_free_scene(t_scene *scene)
+static	void	rt_free_scene_cylinders(t_scene *scene)
 {
 	int	i;
 
-	if (!scene)
-		return ;
-	i = 0;
-	if (scene->spheres)
-	{
-		while (scene->spheres[i])
-			free(scene->spheres[i++]);
-		free(scene->spheres);
-	}
-	i = 0;
-	if (scene->planes)
-	{
-		while (scene->planes[i])
-			free(scene->planes[i++]);
-		free(scene->planes);
-	}
 	i = 0;
 	if (scene->cylinders)
 	{
@@ -47,5 +31,40 @@ void	rt_free_scene(t_scene *scene)
 			free(scene->cylinders[i++]);
 		free(scene->cylinders);
 	}
+}
+
+static	void	rt_free_scene_planes(t_scene *scene)
+{
+	int	i;
+
+	i = 0;
+	if (scene->planes)
+	{
+		while (scene->planes[i])
+			free(scene->planes[i++]);
+		free(scene->planes);
+	}
+}
+
+static	void	rt_free_scene_spheres(t_scene *scene)
+{
+	int	i;
+
+	i = 0;
+	if (scene->spheres)
+	{
+		while (scene->spheres[i])
+			free(scene->spheres[i++]);
+		free(scene->spheres);
+	}
+}
+
+void	rt_free_scene(t_scene *scene)
+{
+	if (!scene)
+		return ;
+	rt_free_scene_spheres(scene);
+	rt_free_scene_planes(scene);
+	rt_free_scene_cylinders(scene);
 	ft_bzero(scene, sizeof(t_scene));
 }

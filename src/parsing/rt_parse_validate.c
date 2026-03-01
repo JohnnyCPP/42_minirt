@@ -20,7 +20,6 @@ int	rt_validate_normalized(t_coordinates vec)
 	if (length < EPSILON_INTSEC)
 		return (0);
 	return (1);
-
 }
 
 int	rt_validate_range(double value, double min, double max)

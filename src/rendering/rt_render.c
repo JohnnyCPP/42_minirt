@@ -16,29 +16,6 @@ int	rt_get_color_int(t_color color)
 	return ((color.red << 16) | (color.green << 8) | color.blue);
 }
 
-
-/*
- * @brief Computes the color for a hit point (ambient only for now).
- *
- * Currently implements only ambient lighting as per mandatory part:
- * color = object_color * ambient_ratio
- *
- * @param scene Scene containing ambient lighting info
- * @param hit Hit point information
- * @return t_color Final color after lighting calculations
- */
-
-
-/* static	t_color	rt_compute_lighting(t_scene *scene, t_hit hit)
-{
-	t_color	result;
-
-	result.red = (int)(hit.color.red * scene->ambient.ratio);
-	result.green = (int)(hit.color.green * scene->ambient.ratio);
-	result.blue = (int)(hit.color.blue * scene->ambient.ratio);
-	return (result);
-}*/
-
 static	void	rt_set_background(t_color *color)
 {
 	color->red = 0;
