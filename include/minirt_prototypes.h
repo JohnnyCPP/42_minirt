@@ -522,9 +522,128 @@ int		rt_validate_range(double value, double min, double max);
  */
 int		rt_check_vec_range(t_coordinates vec, double min, double max);
 
-// Object management
+/**
+ * @brief Adds a new sphere to the scene's sphere array.
+ *
+ * Dynamic array management for spheres:
+ *     1. Count existing spheres
+ *     2. Allocate new array with space for one more + NULL terminator
+ *     3. Create new sphere object
+ *     4. Copy existing sphere pointers
+ *     5. Add new sphere at the end
+ *     6. NULL-terminate the array
+ *     7. Free old array and update scene pointer
+ *
+ * Memory management visualization:
+ *
+ *     Before:
+ *     scene->spheres ──► [sp0][sp1][NULL]
+ *
+ *     After adding sphere sp2:
+ *                         ┌─ sp0 ─┐
+ *                         │  sp1  │
+ *     scene->spheres ──► [├─ sp2 ─┤][NULL]  (new array)
+ *                         └─ ... ─┘
+ *     Old array freed
+ *
+ * @param scene Scene structure to modify
+ * @param sphere Sphere data to add (will be copied to heap)
+ * @return int 1 on success, 0 on failure (with error message)
+ *
+ * @note The sphere parameter is passed by value (stack) and copied to heap
+ * @note The array is always NULL-terminated for easy iteration
+ * @see rt_new_sp for sphere allocation
+ * @see rt_copy_spheres for pointer preservation
+ */
 int		rt_add_sphere(t_scene *scene, t_sphere sphere);
+
+/**
+ * @brief Adds a new plane to the scene's plane array.
+ *
+ * Dynamic array management for planes following the same pattern as spheres.
+ * Implements the classic dynamic array growth strategy:
+ *     size_new = size_old + 1
+ *
+ * Array state transition:
+ *
+ *     Step 1: Count current planes
+ *     scene->planes ──► [pl0][pl1][NULL]  (count = 2)
+ *
+ *     Step 2: Allocate new array (count + 2 slots)
+ *     new_array ──► [  ][  ][  ][NULL]
+ *                    ↑   ↑   ↑
+ *                  slot0|slot1|slot2 (for new plane)
+ *
+ *     Step 3: Copy existing pointers and add new plane
+ *     new_array ──► [pl0][pl1][new][NULL]
+ *
+ *     Step 4: Free old array, update scene pointer
+ *
+ * @param scene Scene structure to modify
+ * @param plane Plane data to add (will be copied to heap)
+ * @return int 1 on success, 0 on failure (with error message)
+ *
+ * @note Memory leak prevention: old array is freed only after successful
+ *       allocation and copying of all data
+ */
 int		rt_add_plane(t_scene *scene, t_plane plane);
+
+/**
+ * @brief Adds a new cylinder to the scene's cylinder array.
+ *
+ * Implements the same dynamic array pattern as spheres and planes,
+ * ensuring consistent memory management across all object types.
+ *
+ * Complete reallocation process:
+ *
+ *     ┌─────────────────────────────────────┐
+ *     │      Add Cylinder to Scene          │
+ *     └─────────────────────────────────────┘
+ *                        │
+ *                        ↓
+ *     ┌─────────────────────────────────────┐
+ *     │ count = current cylinders           │
+ *     │ e.g., 2 cylinders: [c0][c1][NULL]  │
+ *     └─────────────────────────────────────┘
+ *                        │
+ *                        ↓
+ *     ┌─────────────────────────────────────┐
+ *     │ Allocate (count + 2) * pointer size │
+ *     │ New array: [   ][   ][   ][NULL]    │
+ *     │             ↑    ↑    ↑              │
+ *     │            old  old  new cylinder    │
+ *     └─────────────────────────────────────┘
+ *                        │
+ *                        ↓
+ *     ┌─────────────────────────────────────┐
+ *     │ Create new cylinder on heap         │
+ *     │ Copy data: center, orientation,     │
+ *     │           diameter, height, color,  │
+ *     │           radius, half_height       │
+ *     └─────────────────────────────────────┘
+ *                        │
+ *                        ↓
+ *     ┌─────────────────────────────────────┐
+ *     │ Copy old pointers to new array      │
+ *     │ Add new cylinder at the end         │
+ *     │ NULL-terminate array                │
+ *     └─────────────────────────────────────┘
+ *                        │
+ *                        ↓
+ *     ┌─────────────────────────────────────┐
+ *     │ Free old array                      │
+ *     │ Update scene->cylinders             │
+ *     └─────────────────────────────────────┘
+ *
+ * @param scene Scene structure to modify
+ * @param cylinder Cylinder data to add (will be copied to heap)
+ * @return int 1 on success, 0 on failure (with error message)
+ *
+ * @note Pre-computed values (radius, half_height) are part of the
+ *       cylinder structure and are preserved during copying
+ * @see rt_new_cyl for cylinder allocation
+ * @see rt_copy_cylinders for pointer preservation
+ */
 int		rt_add_cylinder(t_scene *scene, t_cylinder cyl);
 
 /**
