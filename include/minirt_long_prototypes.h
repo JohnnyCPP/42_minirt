@@ -144,6 +144,54 @@ t_coordinates	rt_get_camera_right(t_camera *camera);
  */
 t_coordinates	rt_get_camera_up(t_camera *camera);
 
+/**
+ * @brief Computes the surface normal vector at a point on the cylinder's side.
+ *
+ * The normal at any point on a cylinder's side is 
+ * perpendicular to the cylinder's axis and 
+ * points radially outward from the axis to the surface point.
+ *
+ * Mathematical derivation:
+ * 1. Let axis = normalized cylinder orientation vector
+ * 2. Let to_point = vector from cylinder center to hit point
+ * 3. The projection of to_point onto the axis is: (to_point · axis) * axis
+ * 4. The radial component (perpendicular to axis) is: to_point - projection
+ * 5. This radial component is exactly the normal direction (outward from axis)
+ *
+ * Visual representation:
+ *
+ *                    Normal (radially outward)
+ *                         ↑
+ *                         |
+ *                         |   ● Hit point
+ *                         |  /
+ *                         | /
+ *      Axis ──────────────┼/────────────►
+ *                        /│
+ *                       / |
+ *                      /  |
+ *                     ●   |
+ *                 Center  |
+ *                         ↓
+ *                    Projected point
+ *                    on axis
+ *
+ * The normal is normalized to unit length before return.
+ *
+ * @param point The hit point on the cylinder surface (world coordinates)
+ * @param cyl Pointer to cylinder structure containing:
+ *            - center: Center point of cylinder
+ *            - orientation: Direction vector of cylinder axis
+ *            - radius: Cylinder radius (precomputed)
+ * @return t_coordinates Unit normal vector pointing outward from cylinder axis
+ *
+ * @note The returned normal is guaranteed to be perpendicular to the cylinder
+ *       axis (dot product with axis ≈ 0) and have unit length.
+ *
+ * @warning This function assumes point actually lies on the cylinder surface.
+ *          If point is inside the cylinder, the result will still point
+ *          radially outward but may not be accurate for lighting calculations.
+ */
 t_coordinates	rt_get_side_normal(t_coordinates point, t_cylinder *cyl);
 
 #endif

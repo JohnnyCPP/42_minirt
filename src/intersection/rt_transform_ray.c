@@ -50,12 +50,6 @@ void	rt_basis_general(t_coordinates a, t_coordinates *rgt, t_coordinates *up)
 	*up = rt_normalize_vector(*up);
 }
 
-/**
- * @brief Transforms ray into cylinder's local coordinate system.
- *
- * We create a basis where the cylinder axis is the Y axis.
- * This simplifies the intersection math significantly.
- */
 void	rt_transform_ray(t_ray ray, t_cylinder *cyl, t_ray *local_ray)
 {
 	t_coordinates	axis;

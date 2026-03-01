@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
-/**
- * @brief Computes normal at a point on cylinder side.
- */
 t_coordinates	rt_get_side_normal(t_coordinates point, t_cylinder *cyl)
 {
 	t_coordinates	axis;

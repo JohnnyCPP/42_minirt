@@ -95,9 +95,6 @@ int	rt_check_cap_hit(t_hit cap_hit, t_plane cap, t_cylinder *cyl, t_hit *hit)
 	return (0);
 }
 
-/**
- * @brief Tests intersection with cylinder caps (top and bottom).
- */
 int	rt_intersect_caps(t_ray ray, t_cylinder *cyl, t_hit *hit)
 {
 	t_plane			bottom_cap;

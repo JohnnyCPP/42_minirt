@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
-/**
- * @brief Checks if a point on infinite cylinder is within height bounds.
- */
 int	rt_within_height(double y, t_cylinder *cyl)
 {
 	return (fabs(y) <= cyl->half_height + EPSILON);

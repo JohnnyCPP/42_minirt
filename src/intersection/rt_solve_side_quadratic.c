@@ -11,11 +11,6 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
-/**
- * @brief Solves quadratic for cylinder side intersection.
- *
- * In local coordinates, cylinder is x² + z² = r², infinite in y.
- */
 int	rt_solve_side_quadratic(t_ray local, double r, double *t1, double *t2)
 {
 	double	a;

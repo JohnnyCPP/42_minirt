@@ -319,12 +319,169 @@ int		rt_intersect_plane(t_ray ray, t_plane *plane, t_hit *hit);
  */
 int		rt_intersect_cylinder(t_ray ray, t_cylinder *cylinder, t_hit *hit);
 
+/**
+ * @brief Transforms a ray from world space to the 
+ *        cylinder's local coordinate space.
+ *
+ * Creates an orthonormal basis where the cylinder's axis becomes the Y-axis,
+ * simplifying intersection calculations. The transformation preserves distances
+ * and angles as it uses an orthonormal basis.
+ *
+ * Visual representation of the transformation:
+ *
+ *     World Space                    Local Space (cylinder coordinates)
+ *     ┌─────────────┐                 ┌─────────────┐
+ *     │      ↑      │                 │      ↑      │
+ *     │      │      │                 │      │      │
+ *     │      │      │    ─────────►   │      │ axis │
+ *     │      │      │                 │      │ (Y)  │
+ *     │      │      │                 │      │      │
+ *     │      │      │                 │      │      │
+ *     │      │      │                 │      │      │
+ *     │      │      │                 │      │      │
+ *     │      │      │                 └──────┴──────┼──►
+ *     └──────┴──────┼──►                  right (X)    up (Z)
+ *              up (Y)  right (X)
+ *
+ * Mathematical process:
+ * 1. Normalize cylinder orientation to get axis vector
+ * 2. Build orthonormal basis (right, up) perpendicular to axis
+ * 3. Project ray origin onto basis vectors using dot products
+ * 4. Project ray direction onto basis vectors using dot products
+ * 5. Normalize resulting local direction vector
+ *
+ * @param ray The ray in world space coordinates
+ * @param cyl Pointer to cylinder defining the local coordinate system
+ * @param local_ray Output parameter that will contain the transformed ray
+ *                  in cylinder's local space where:
+ *                  - Y-axis = cylinder axis
+ *                  - X-axis = right vector (perpendicular to axis)
+ *                  - Z-axis = up vector (completes orthonormal basis)
+ *
+ * @note After transformation, in local space:
+ *       - The cylinder is centered at origin
+ *       - The cylinder axis aligns with Y-axis
+ *       - The cylinder extends from -half_height to +half_height in Y
+ *       - The cylinder radius is checked in XZ plane (X² + Z² ≤ r²)
+ *
+ * @warning This function assumes cyl->orientation is not a zero vector.
+ *          The caller should ensure orientation is valid.
+ */
 void	rt_transform_ray(t_ray ray, t_cylinder *cyl, t_ray *local_ray);
 
+/**
+ * @brief Solves the quadratic equation for ray-cylinder side intersection.
+ *
+ * In cylinder local space, the side surface is defined by x² + z² = r²,
+ * independent of y (infinite cylinder). This function solves for the
+ * ray parameter t where the ray satisfies this equation.
+ *
+ * The quadratic equation derived from substituting ray equation into cylinder:
+ *
+ * Given ray: (x,y,z) = (ox, oy, oz) + t*(dx, dy, dz)
+ *
+ * Substituting into x² + z² = r²:
+ * (ox + t*dx)² + (oz + t*dz)² = r²
+ *
+ * Expanding:
+ * (dx² + dz²)t² + 2(ox*dx + oz*dz)t + (ox² + oz² - r²) = 0
+ *
+ * Which matches the standard quadratic form: a·t² + b·t + c = 0
+ *
+ * @param local The ray in cylinder local coordinates (from rt_transform_ray)
+ * @param r The cylinder radius (diameter/2)
+ * @param t1 Output parameter for the first intersection distance (smaller t)
+ * @param t2 Output parameter for the second intersection distance (larger t)
+ * @return int 1 if solutions exist (discriminant ≥ 0), 0 otherwise
+ *
+ * @note The returned t values are in ray parameter space, not adjusted for
+ *       cylinder height. Caller must check if corresponding y coordinates
+ *       are within cylinder height using rt_within_height().
+ *
+ * @note If ray is parallel to cylinder axis (a ≈ 0), returns 0 as there
+ *       is no side intersection (ray either misses or runs along surface).
+ */
 int		rt_solve_side_quadratic(t_ray local, double r, double *t1, double *t2);
 
+/**
+ * @brief Checks if a Y-coordinate in local space is 
+ *        within cylinder height bounds.
+ *
+ * After finding intersection points on the infinite cylinder, this function
+ * verifies whether the corresponding y-coordinate falls within the cylinder's
+ * finite height range.
+ *
+ * Visual representation:
+ *
+ *                    ▲ Y (axis)
+ *                    │
+ *       half_height ─┼─── Top cap
+ *                    │   ● Hit point (valid if |y| ≤ half_height)
+ *                    │   │
+ *                    │   │
+ *                  0 ┼───┼─── Cylinder center
+ *                    │   │
+ *                    │   │
+ *      -half_height ─┼─── Bottom cap
+ *                    │
+ *                    │
+ *
+ * @param y The Y-coordinate in local space (from ray equation: oy + t*dy)
+ * @param cyl Pointer to cylinder containing half_height
+ * @return int 1 if |y| ≤ half_height (within cylinder bounds + EPSILON),
+ *             0 otherwise
+ *
+ * @note EPSILON provides a small tolerance for floating-point precision issues
+ *       when the hit point is exactly at the cap boundaries.
+ */
 int		rt_within_height(double y, t_cylinder *cyl);
 
+/**
+ * @brief Tests intersection between a ray and the cylinder's end caps.
+ *
+ * Cylinders have two flat circular caps at top and bottom. This function
+ * treats each cap as a plane and then checks if the plane intersection point
+ * lies within the circular disk of the cap.
+ *
+ * Process for each cap:
+ * 1. Create a plane at cap position with normal along cylinder axis
+ * 2. Test ray-plane intersection
+ * 3. If hit, check if hit point is within cap radius
+ * 4. Keep the closest valid cap intersection
+ *
+ * Visual representation of cap intersection:
+ *
+ *                    Top cap plane
+ *     ┌─────────────────────────────┐
+ *     │              ▲              │
+ *     │             ╱               │
+ *     │            ╱ ray            │
+ *     │           ╱                 │
+ *     │          ╱                  │
+ *     │         ● Hit point         │
+ *     │       ╱  │                  │
+ *     │      ╱   │                  │
+ *     │     ╱    │ radius           │
+ *     │    ╱     │                  │
+ *     │   ╱      │                  │
+ *     │  ╱       ▼                  │
+ *     │ ╱     Center                │
+ *     │╱                            │
+ *     └─────────────────────────────┘
+ *
+ * @param ray The ray in world space to test against caps
+ * @param cyl Pointer to cylinder containing cap geometry
+ * @param hit Output parameter populated with closest cap intersection data
+ * @return int 1 if any cap was hit, 0 otherwise
+ *
+ * @note The function checks both bottom and top caps and automatically
+ *       keeps the closest intersection if multiple caps are hit.
+ *
+ * @warning This function assumes the ray has already been checked against
+ *          the cylinder side. Caps may be hit even if side is missed.
+ *
+ * @see rt_set_bottom_cap, rt_set_top_cap, rt_check_cap_hit
+ */
 int		rt_intersect_caps(t_ray ray, t_cylinder *cyl, t_hit *hit);
 
 #endif
