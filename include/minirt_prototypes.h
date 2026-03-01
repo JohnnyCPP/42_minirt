@@ -109,7 +109,50 @@ int		rt_h_close(t_data *data);
  */
 void	rt_put_pxl(t_img *img, int x, int y, int color);
 
-// Lighting
+/**
+ * @brief Computes the final lighting color at a hit point using Phong model.
+ *
+ * Combines ambient and diffuse lighting components with shadow handling
+ * to produce the final pixel color.
+ *
+ * The lighting computation follows this decision tree:
+ *
+ *                    Hit point
+ *                        |
+ *            ┌───────────┴───────────┐
+ *            ↓                        ↓
+ *     Ambient lighting          Diffuse lighting
+ *     (always present)          (if surface faces light)
+ *            ↓                        ↓
+ *     base_color * 0.2      color * (n·l) * brightness
+ *            ↓                        ↓
+ *            └───────────┬─────────────┘
+ *                        ↓
+ *                 Is point in shadow?
+ *                        ↓
+ *            ┌───────────┴───────────┐
+ *            ↓                        ↓
+ *          Yes                        No
+ *            ↓                        ↓
+ *     Return ambient only       Return ambient + diffuse
+ *
+ * @param scene Pointer to scene containing ambient light and light source
+ * @param hit The hit point data (position, normal, object color)
+ * @return t_color Final color after all lighting calculations
+ *
+ * @note Special cases handled:
+ *       - If diffuse contribution is zero (surface facing away),
+ *         returns only ambient
+ *       - If point is in shadow, returns only ambient (no diffuse)
+ *       - Final color components are clamped to [0, 255]
+ *
+ * @see rt_compute_diffuse for diffuse calculation details
+ * @see rt_is_in_shadow for shadow determination
+ * @see rt_clamp for color component clamping
+ *
+ * @warning This implements the mandatory part only (ambient + diffuse).
+ *          Specular and other lighting effects are not included.
+ */
 t_color	rt_compute_lighting(t_scene *scene, t_hit hit);
 
 // Parsing
