@@ -13,47 +13,14 @@
 # define MINIRT_PROTOTYPES_H
 
 /**
- * @brief Initializes mock sphere data for testing before parser implementation.
- * 
- * Allocates and configures a single sphere with hardcoded values:
- * center(0,0,20.6), diameter 12.6, color(10,0,255)
- * 
- * @param scene Pointer to scene structure to populate with sphere data
- */
-void	rt_mock_spheres(t_scene *scene);
-
-/**
- * @brief Initializes mock plane data for testing before parser implementation.
- *
- * Allocates and configures a single plane with hardcoded values:
- * point(0,0,-10), normal(0,1,0), color(0,0,255)
- *
- * @param scene Pointer to scene structure to populate with plane data
- */
-void	rt_mock_planes(t_scene *scene);
-
-/**
- * @brief Initializes mock cylinder data 
- *        for testing before parser implementation.
- *
- * Allocates and configures a single cylinder with hardcoded values:
- * center(0,0,20.6), orientation(0,1,0), 
- * diameter 12.6, height 12.6, color(10,0,255)
- *
- * @param scene Pointer to scene structure to populate with cylinder data
- */
-void	rt_mock_cylinders(t_scene *scene);
-
-/**
  * @brief Initializes the MLX library, creates window, and sets up the scene.
  *
- * Creates MLX instance, window, and image buffer. Also initializes scene
- * with hardcoded values for testing.
+ * Creates MLX instance, window, and image buffer.
  *
- * @param data Pointer to main data structure containing MLX and scene info
+ * @param data Pointer to structure containing MLX and scene info
  * @return int EXIT_SUCCESS on success, EXIT_ERROR on failure
  */
-int		rt_init(t_data *data);
+int		rt_init_mlx(t_minilib *mlx);
 
 /**
  * @brief Cleans up all allocated resources and destroys MLX objects.
