@@ -9,9 +9,22 @@
 /*   Updated: 2026/01/26 02:49:28 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
+/**
+ * @brief Parses light color with default fallback.
+ *
+ * Light color is optional in the .rt format. If not provided,
+ * defaults to white (255,255,255).
+ *
+ * Format variations:
+ *     With color:  L  -40,0,30  0.7  255,255,255
+ *     Without:     L  -40,0,30  0.7
+ *
+ * @param tokens Token array (may have 3 or 4 tokens)
+ * @param light Light structure to populate
+ * @return int 1 always (color is optional)
+ */
 static int	rt_parse_light_color(char **tokens, t_light *light)
 {
 	if (tokens[3])

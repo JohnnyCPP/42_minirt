@@ -9,9 +9,22 @@
 /*   Updated: 2026/02/24 10:34:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
+/**
+ * @brief Parses a single-element scene component (A, C, L).
+ *
+ * Handles elements that can only appear once in the scene:
+ *     - A: Ambient lighting
+ *     - C: Camera
+ *     - L: Light
+ *
+ * Checks for duplicates using has_* flags in scene structure.
+ *
+ * @param tokens Tokenized line
+ * @param scene Scene structure to populate
+ * @return int 1 on success, 0 on failure, -1 if not an element
+ */
 static int	rt_parse_element(char **tokens, t_scene *scene)
 {
 	if (ft_strcmp(tokens[0], "A") == 0)
@@ -38,6 +51,20 @@ static int	rt_parse_element(char **tokens, t_scene *scene)
 	return (-1);
 }
 
+/**
+ * @brief Parses a multiple-instance object (sp, pl, cy).
+ *
+ * Handles objects that can appear multiple times:
+ *     - sp: Sphere
+ *     - pl: Plane
+ *     - cy: Cylinder
+ *
+ * Creates temporary objects and adds them to scene arrays.
+ *
+ * @param tokens Tokenized line
+ * @param scene Scene structure to populate
+ * @return int 1 on success, 0 on failure
+ */
 static int	rt_parse_object(char **tokens, t_scene *scene)
 {
 	t_sphere	sp;

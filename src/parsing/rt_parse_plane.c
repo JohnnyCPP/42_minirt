@@ -9,7 +9,6 @@
 /*   Updated: 2026/01/23 15:00:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
 int	rt_parse_plane(char **tokens, t_plane *plane)

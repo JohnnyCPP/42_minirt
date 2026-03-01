@@ -155,22 +155,371 @@ void	rt_put_pxl(t_img *img, int x, int y, int color);
  */
 t_color	rt_compute_lighting(t_scene *scene, t_hit hit);
 
-// Parsing
+/**
+ * @brief Main file parsing function - reads and validates .rt scene file.
+ *
+ * Complete parsing workflow:
+ *
+ *     filename
+ *         ↓
+ *     Check .rt extension ──Fail──► Error
+ *         ↓ Pass
+ *     Open file ───────────Fail──► Error
+ *         ↓ Pass
+ *     Initialize scene (zero)
+ *         ↓
+ *     Read and parse all lines ──Fail──► Close file, free scene, error
+ *         ↓ Success
+ *     Close file
+ *         ↓
+ *     Validate required elements ──Fail──► Free scene, error
+ *         ↓ Pass
+ *     Return success
+ *
+ * @param filename Path to .rt scene file
+ * @param scene Output parameter for parsed scene
+ * @return int 1 on success, 0 on failure
+ *
+ * @note On failure, scene is automatically freed and zeroed
+ * @note Memory leaks are prevented by proper cleanup in error paths
+ */
 int		rt_parse_file(char *filename, t_scene *scene);
+
+/**
+ * @brief Parses a single line from the scene file.
+ *
+ * Main line parsing function that:
+ *     1. Skips empty lines and comments
+ *     2. Tokenizes the line
+ *     3. Routes to appropriate parser based on identifier
+ *
+ * Line processing flow:
+ *
+ *     Raw line
+ *         ↓
+ *     Empty or comment? ──Yes──► Return 1 (skip)
+ *         ↓ No
+ *     Tokenize
+ *         ↓
+ *     Parse element (A/C/L)? ──Yes──► Validate duplicate, parse
+ *         ↓ No                      ↓
+ *     Parse object (sp/pl/cy)? ──Yes──► Parse and add to scene
+ *         ↓ No                      ↓
+ *     Unknown identifier ──────────► Error
+ *
+ * @param line Raw line from scene file
+ * @param scene Scene structure to populate
+ * @return int 1 on success, 0 on failure
+ */
 int		rt_parse_line(char *line, t_scene *scene);
+
+/**
+ * @brief Parses ambient lighting definition from tokenized line.
+ *
+ * Expected format:
+ *     A  ratio  color
+ *     ↓  ↓      ↓
+ *     [0] [1]   [2]
+ *
+ * Example:
+ *     A  0.2  255,255,255
+ *
+ * Parsing steps:
+ *     1. Validate token count (exactly 3 tokens)
+ *     2. Parse ratio
+ *     3. Validate ratio in range [0.0, 1.0]
+ *     4. Parse color
+ *
+ * Validation ensures:
+ *     - Ratio between 0.0 and 1.0 (inclusive)
+ *     - Color components within [0, 255]
+ *
+ * @param tokens Array of tokens from the parsed line
+ * @param ambient Output parameter for parsed ambient light
+ * @return int 1 on success, 0 on failure (with error message)
+ *
+ * @note Ambient lighting is a single declaration in the scene file
+ * @see rt_validate_range for ratio validation
+ */
 int		rt_parse_ambient(char **tokens, t_amb_light *ambient);
+
+/**
+ * @brief Parses a camera definition from tokenized line.
+ *
+ * Expected format:
+ *     C  viewpoint  orientation  FOV
+ *     ↓  ↓          ↓            ↓
+ *     [0] [1]       [2]          [3]
+ *
+ * Example:
+ *     C  -50,0,20  0,0,1  70
+ *
+ * Parsing steps:
+ *     1. Validate token count (exactly 4 tokens)
+ *     2. Parse viewpoint position
+ *     3. Parse orientation vector
+ *     4. Validate orientation components in range [-1, 1]
+ *     5. Validate orientation is not zero vector
+ *     6. Normalize orientation
+ *     7. Parse and validate FOV in range [0, 180]
+ *
+ * Validation ensures:
+ *     - Orientation components within [-1, 1]
+ *     - Orientation has non-zero length
+ *     - FOV is integer between 0 and 180 degrees
+ *
+ * @param tokens Array of tokens from the parsed line
+ * @param camera Output parameter for parsed camera
+ * @return int 1 on success, 0 on failure (with error message)
+ *
+ * @note The orientation is normalized to ensure unit length
+ *       for consistent ray generation.
+ */
 int		rt_parse_camera(char **tokens, t_camera *camera);
+
+/**
+ * @brief Parses a light definition from tokenized line.
+ *
+ * Expected format:
+ *     L  position  brightness  [color]
+ *     ↓   ↓        ↓            ↓
+ *     [0] [1]      [2]          [3] (optional)
+ *
+ * Example:
+ *     L  -40,0,30  0.7  255,255,255
+ *
+ * Parsing steps:
+ *     1. Validate minimum token count (at least 3)
+ *     2. Parse position
+ *     3. Parse brightness
+ *     4. Validate brightness in range [0.0, 1.0]
+ *     5. Parse color (or use default white)
+ *
+ * @param tokens Array of tokens from the parsed line
+ * @param light Output parameter for parsed light
+ * @return int 1 on success, 0 on failure (with error message)
+ *
+ * @note Color is optional per subject, defaults to white
+ */
 int		rt_parse_light(char **tokens, t_light *light);
+
+/**
+ * @brief Parses a sphere definition from tokenized line.
+ *
+ * Expected format:
+ *     sp  center  diameter  color
+ *     ↓   ↓       ↓         ↓
+ *     [0] [1]     [2]       [3]
+ *
+ * Example:
+ *     sp  0,0,20.6  12.6  255,0,0
+ *
+ * Parsing steps:
+ *     1. Validate token count (exactly 4 tokens)
+ *     2. Parse center coordinates
+ *     3. Parse diameter
+ *     4. Validate diameter positive
+ *     5. Parse color
+ *
+ * Validation ensures:
+ *     - Diameter > 0 (physical object must have size)
+ *     - Color components within [0, 255]
+ *
+ * @param tokens Array of tokens from the parsed line
+ * @param sphere Output parameter for parsed sphere
+ * @return int 1 on success, 0 on failure (with error message)
+ *
+ * @note Unlike cylinders, spheres don't need pre-computed values
+ *       as radius is calculated on-the-fly during intersection.
+ */
 int		rt_parse_sphere(char **tokens, t_sphere *sphere);
+
+/**
+ * @brief Parses a plane definition from tokenized line.
+ *
+ * Expected format:
+ *     pl  point  normal  color
+ *     ↓   ↓      ↓       ↓
+ *     [0] [1]    [2]     [3]
+ *
+ * Example:
+ *     pl  0,0,0  0,1,0  0,255,0
+ *
+ * Parsing steps:
+ *     1. Validate token count (exactly 4 tokens)
+ *     2. Parse point on plane
+ *     3. Parse normal vector
+ *     4. Validate normal components in range [-1, 1]
+ *     5. Validate normal is not zero vector
+ *     6. Normalize normal vector
+ *     7. Parse color
+ *
+ * Validation ensures:
+ *     - Normal vector components are within [-1, 1]
+ *     - Normal vector has non-zero length
+ *     - Color components within [0, 255]
+ *
+ * @param tokens Array of tokens from the parsed line
+ * @param plane Output parameter for parsed plane
+ * @return int 1 on success, 0 on failure (with error message)
+ *
+ * @note The normal vector is automatically normalized after validation
+ *       to ensure unit length for intersection calculations.
+ */
 int		rt_parse_plane(char **tokens, t_plane *plane);
+
+/**
+ * @brief Parses a cylinder definition from tokenized line.
+ *
+ * Expected format:
+ *     cy  center  axis  diameter  height  color
+ *     ↓   ↓       ↓     ↓         ↓       ↓
+ *     [0] [1]     [2]   [3]       [4]     [5]
+ *
+ * Example:
+ *     cy  0,0,20.6  0,0,1  14.2  21.42  10,0,255
+ *
+ * Parsing steps:
+ *     1. Validate token count (exactly 6 tokens)
+ *     2. Parse center vector
+ *     3. Parse axis orientation vector
+ *     4. Parse diameter
+ *     5. Parse height
+ *     6. Parse color
+ *     7. Validate semantic constraints
+ *     8. Pre-compute radius and half_height
+ *
+ * @param tokens Array of tokens from the parsed line
+ * @param cyl Output parameter for parsed cylinder
+ * @return int 1 on success, 0 on failure (with error message)
+ *
+ * @see rt_validate_cylinder_data for post-parse validation
+ */
 int		rt_parse_cylinder(char **tokens, t_cylinder *cyl);
 
-// Parsing utilities
+/**
+ * @brief Parses a floating-point number from a string.
+ *
+ * Wrapper around rt_atof that validates the entire string was consumed.
+ * Ensures there are no extra characters after the number (except whitespace).
+ *
+ * Parsing examples:
+ *     "42.5"   → OK (endptr at '\0')
+ *     "42.5 "  → OK (endptr at space, allowed)
+ *     "42.5x"  → FAIL (endptr at 'x', not allowed)
+ *
+ * @param str String to parse (expected to contain a float)
+ * @param result Output parameter for the parsed value
+ * @return int 1 on success, 0 on failure
+ *
+ * @note Used extensively throughout parsing for numeric values
+ * @see rt_atof for the actual conversion
+ */
 int		rt_parse_float(char *str, double *result);
+
+/**
+ * @brief Parses a 3D vector from a comma-separated string.
+ *
+ * Format expected: "x,y,z" where each component is a floating-point number.
+ *
+ * Parsing flow:
+ *     Input: "1.5,-2.0,3.7"
+ *            ↓       ↓    ↓
+ *     Split: ["1.5", "-2.0", "3.7", NULL]
+ *              ↓      ↓       ↓
+ *            parse  parse   parse
+ *              ↓      ↓       ↓
+ *            vec.x  vec.y   vec.z
+ *
+ * Validation ensures:
+ *     - Exactly three components (no more, no less)
+ *     - Each component is a valid float
+ *     - No extra trailing data
+ *
+ * @param str The comma-separated vector string
+ * @param vec Output parameter for parsed coordinates
+ * @return int 1 on success, 0 on failure
+ *
+ * @note The input string is not modified
+ * @note Memory for split parts is automatically freed
+ */
 int		rt_parse_vec3(char *str, t_coordinates *vec);
+
+/**
+ * @brief Parses an RGB color from a comma-separated string.
+ *
+ * Format expected: "r,g,b" where each component is an integer 0-255.
+ *
+ * Parsing flow:
+ *     Input: "255,128,0"
+ *            ↓    ↓   ↓
+ *     Split: ["255", "128", "0", NULL]
+ *              ↓     ↓     ↓
+ *            atoi   atoi  atoi
+ *              ↓     ↓     ↓
+ *            red=255 g=128 b=0
+ *
+ * Validation ensures:
+ *     - Exactly three components
+ *     - Each component is a valid integer
+ *     - Each component is in range [0, 255]
+ *
+ * @param str The comma-separated color string
+ * @param color Output parameter for parsed color
+ * @return int 1 on success, 0 on failure
+ */
 int		rt_parse_color(char *str, t_color *color);
+
+/**
+ * @brief Validates that a vector has non-zero length (can be normalized).
+ *
+ * Checks if a vector can be used as a valid direction/orientation vector.
+ * A zero vector would cause division by zero during normalization.
+ *
+ * Validation criteria:
+ *     - sqrt(x² + y² + z²) > EPSILON_INTSEC
+ *
+ * @param vec The vector to validate
+ * @return int 1 if vector length > EPSILON_INTSEC, 0 otherwise
+ *
+ * @note Uses EPSILON_INTSEC (1e-6) as threshold to handle floating-point
+ *       precision issues with near-zero vectors.
+ *
+ * @see EPSILON_INTSEC defined in minirt_constants.h
+ */
 int		rt_validate_normalized(t_coordinates vec);
+
+/**
+ * @brief Validates that a scalar value is within specified range [min, max].
+ *
+ * Used throughout parsing to ensure values like light brightness,
+ * ambient ratio, etc., conform to .rt file format specifications.
+ *
+ * @param value The value to validate
+ * @param min Minimum allowed value (inclusive)
+ * @param max Maximum allowed value (inclusive)
+ * @return int 1 if min ≤ value ≤ max, 0 otherwise
+ */
 int		rt_validate_range(double value, double min, double max);
+
+/**
+ * @brief Validates that all components of a vector are within specified range.
+ *
+ * Convenience wrapper around rt_validate_range for vectors.
+ * Ensures each coordinate satisfies x,y,z ∈ [min, max].
+ *
+ * Used primarily for:
+ *     - Camera orientation vectors (must be in [-1, 1])
+ *     - Plane normal vectors (must be in [-1, 1])
+ *     - Cylinder axis vectors (must be in [-1, 1])
+ *
+ * @param vec The vector to validate
+ * @param min Minimum allowed value for each component
+ * @param max Maximum allowed value for each component
+ * @return int 1 if all components are in range, 0 otherwise
+ *
+ * @see rt_validate_range for component validation
+ */
 int		rt_check_vec_range(t_coordinates vec, double min, double max);
 
 // Object management
@@ -178,13 +527,174 @@ int		rt_add_sphere(t_scene *scene, t_sphere sphere);
 int		rt_add_plane(t_scene *scene, t_plane plane);
 int		rt_add_cylinder(t_scene *scene, t_cylinder cyl);
 
-// Error handling
+/**
+ * @brief Prints an error message to stderr and returns failure.
+ *
+ * Standard error reporting function for the miniRT project.
+ * Always prints "Error\n" followed by an optional custom message.
+ * Used throughout parsing and initialization to provide consistent
+ * error feedback to the user.
+ *
+ * Output format:
+ *     Error
+ *     [message]   (if message is not NULL)
+ *
+ * Example usage:
+ *     if (rt_validate_range(value, 0, 1))
+ *         return (rt_error("Light ratio must be between 0 and 1"));
+ *
+ *     stderr output:
+ *     Error
+ *     Light ratio must be between 0 and 1
+ *
+ * @param message Optional error description (can be NULL)
+ * @return int Always returns 0 for convenient error return pattern:
+ *            "return (rt_error("message"));"
+ *
+ * @note The function returns 0 to allow easy integration with
+ *       functions that expect to return 0 on failure.
+ */
 int		rt_error(char *message);
+
+/**
+ * @brief Frees all dynamically allocated memory in a scene structure.
+ *
+ * Comprehensive cleanup function that:
+ *     1. Frees all spheres array and individual spheres
+ *     2. Frees all planes array and individual planes
+ *     3. Frees all cylinders array and individual cylinders
+ *     4. Zeroes out the entire scene structure
+ *
+ * Memory layout cleanup:
+ *
+ *     scene ──► spheres ──► [0] ──► sphere0
+ *     (zeroed)    │         [1] ──► sphere1
+ *                 │         [2] ──► sphere2
+ *                 │         [3] ──► NULL
+ *                 │
+ *                 ├── planes ──► [0] ──► plane0
+ *                 │              [1] ──► plane1
+ *                 │              [2] ──► NULL
+ *                 │
+ *                 └── cylinders ─► [0] ──► cylinder0
+ *                                  [1] ──► NULL
+ *
+ *     After rt_free_scene:
+ *     All individual objects freed, all arrays freed,
+ *     scene structure zeroed (all pointers NULL)
+ *
+ * @param scene Pointer to scene structure to free
+ *
+ * @note This function safely handles NULL pointers and partial arrays
+ * @note After calling this, the scene structure should not be used
+ *       without reinitialization
+ * @note Part of the mandatory memory management requirements
+ *
+ * @see rt_free_scene_spheres
+ * @see rt_free_scene_planes
+ * @see rt_free_scene_cylinders
+ */
 void	rt_free_scene(t_scene *scene);
 
-// Utils
+/**
+ * @brief Converts a string to a double-precision floating-point number.
+ *
+ * Custom implementation of atof that parses:
+ *     - Optional leading whitespace
+ *     - Optional sign (+ or -)
+ *     - Integer part (digits before decimal)
+ *     - Optional decimal point and fractional part
+ *     - Updates endptr to point after the parsed number
+ *
+ * Parsing example:
+ *
+ *     String: "  -42.75abc"
+ *              ↑↑↑↑↑↑↑↑↑↑↑
+ *              ||||||||||└─ endptr points to 'a'
+ *              |||||||||└── parsed
+ *              ||||||||└─── fractional part .75
+ *              |||||||└──── decimal point
+ *              ||||||└───── integer part 42
+ *              |||||└────── sign '-'
+ *              ||||└─────── whitespace skipped
+ *              |||└──────── leading whitespace
+ *
+ * @param str The string to parse
+ * @param endptr Output parameter set to point to the character after
+ *               the last parsed character
+ * @return double The parsed floating-point value
+ *
+ * @note This function does not handle scientific notation (e.g., 1.2e-3)
+ * @note If no digits are found, result will be 0.0 and endptr points
+ *       to the original string (after whitespace/sign)
+ *
+ * @see rt_parse_fraction for fractional part parsing
+ */
 double	rt_atof(const char *str, char **endptr);
+
+/**
+ * @brief Frees a NULL-terminated array of strings and the array itself.
+ *
+ * Properly deallocates memory for a token array created by rt_tokenize():
+ *     1. Frees each individual string in the array
+ *     2. Frees the array itself
+ *     3. Handles NULL input gracefully
+ *
+ * Memory layout before and after:
+ *
+ *     Before:
+ *     tokens ──► [0] ──► "sphere"
+ *                [1] ──► "0,0,0"
+ *                [2] ──► "10"
+ *                [3] ──► "255,0,0"
+ *                [4] ──► NULL
+ *
+ *     After:
+ *     All memory freed, tokens pointer becomes dangling
+ *     (caller should set to NULL after calling)
+ *
+ * @param split The NULL-terminated array of strings to free
+ *
+ * @note This function safely handles NULL input or partially allocated
+ *       arrays (stops at first NULL in the array)
+ * @note Does not set the input pointer to NULL - caller should do this
+ *       to prevent use-after-free
+ *
+ * @see rt_tokenize for array creation
+ */
 void	rt_free_split(char **split);
+
+/**
+ * @brief Splits a string into an array of tokens based on whitespace.
+ *
+ * This function mimics the behavior of a simplified strtok, tokenizing
+ * the input string by whitespace characters (space, tab, newline, carriage
+ * return). The resulting array is NULL-terminated and must be freed with
+ * rt_free_split().
+ *
+ * Tokenization process:
+ *
+ *     Input:  "  sphere  0,0,0  10  255,0,0  "
+ *                ↓    ↓      ↓   ↓       ↓
+ *     Tokens: ["sphere", "0,0,0", "10", "255,0,0", NULL]
+ *
+ * The function handles:
+ *     - Leading/trailing whitespace
+ *     - Multiple consecutive whitespace characters
+ *     - Empty strings (returns NULL)
+ *     - Memory allocation failures (frees partial tokens and returns NULL)
+ *
+ * @param str The input string to tokenize (not modified)
+ * @return char** NULL-terminated array of token strings,
+ *         or NULL if allocation fails or input is NULL
+ *
+ * @note The caller is responsible for freeing the returned array using
+ *       rt_free_split().
+ *
+ * @see rt_free_split for proper deallocation
+ * @see rt_count_tokens for token counting logic
+ * @see rt_extract_token for individual token extraction
+ */
 char	**rt_tokenize(char *str);
 
 /**

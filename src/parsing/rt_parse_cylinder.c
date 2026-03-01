@@ -9,7 +9,6 @@
 /*   Updated: 2026/02/24 13:00:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
 static int	rt_validate_cylinder_data(t_cylinder *cyl)

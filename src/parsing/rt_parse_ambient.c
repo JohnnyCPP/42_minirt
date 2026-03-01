@@ -9,7 +9,6 @@
 /*   Updated: 2025/01/26 00:00:00 by jonnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
 int	rt_parse_ambient(char **tokens, t_amb_light *ambient)

@@ -9,7 +9,6 @@
 /*   Updated: 2026/01/26 02:49:28 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
 int	rt_parse_sphere(char **tokens, t_sphere *sphere)

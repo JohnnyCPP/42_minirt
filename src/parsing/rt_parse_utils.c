@@ -9,7 +9,6 @@
 /*   Updated: 2026/01/26 16:30:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
 int	rt_parse_float(char *str, double *result)

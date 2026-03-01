@@ -9,7 +9,6 @@
 /*   Updated: 2026/01/26 02:49:28 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
 static double	rt_parse_fraction(const char *str, char **endptr, int *i)

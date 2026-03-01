@@ -9,9 +9,17 @@
 /*   Updated: 2026/02/24 10:00:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
+/**
+ * @brief Validates that the file has the correct .rt extension.
+ *
+ * Checks the last 3 characters of the filename are ".rt".
+ * Case-sensitive check (must be lowercase).
+ *
+ * @param filename Name of the file to check
+ * @return int 1 if extension is correct, 0 otherwise
+ */
 static int	rt_check_extension(char *filename)
 {
 	int	len;
@@ -26,6 +34,19 @@ static int	rt_check_extension(char *filename)
 	return (1);
 }
 
+/**
+ * @brief Validates that all required single elements are present.
+ *
+ * Checks that the scene contains exactly one of each:
+ *     - Ambient lighting (A)
+ *     - Camera (C)
+ *     - Light (L)
+ *
+ * These are mandatory per the subject.
+ *
+ * @param scene Scene structure with has_* flags
+ * @return int 1 if all required elements present, 0 otherwise
+ */
 static int	rt_validate_scene(t_scene *scene)
 {
 	if (!scene->has_ambient)
@@ -37,6 +58,27 @@ static int	rt_validate_scene(t_scene *scene)
 	return (1);
 }
 
+/**
+ * @brief Reads and parses all lines from the scene file.
+ *
+ * Continuous reading and parsing loop:
+ *
+ *     Open file
+ *         ↓
+ *     Read line (GNL)
+ *         ↓
+ *     Parse line
+ *         ↓
+ *     ┌──Success?──No──► Cleanup, return 0
+ *     ↓ Yes
+ *     More lines?──Yes──► Continue reading
+ *     ↓ No
+ *     Return 1
+ *
+ * @param fd Open file descriptor
+ * @param scene Scene structure to populate
+ * @return int 1 on success, 0 on failure
+ */
 static int	rt_read_and_parse(int fd, t_scene *scene)
 {
 	char	*line;
