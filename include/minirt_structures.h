@@ -116,6 +116,7 @@ typedef struct s_sphere
 	t_coordinates	center;
 	double			diameter;
 	t_color			color;
+	double			radius;
 }	t_sphere;
 
 /**

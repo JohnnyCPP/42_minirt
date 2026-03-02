@@ -21,6 +21,7 @@ int	rt_parse_sphere(char **tokens, t_sphere *sphere)
 		return (rt_error("Invalid sphere diameter"));
 	if (sphere->diameter <= 0.0)
 		return (rt_error("Sphere diameter must be positive"));
+	sphere->radius = sphere->diameter / 2.0;
 	if (!rt_parse_color(tokens[3], &sphere->color))
 		return (rt_error("Invalid sphere color"));
 	return (1);

@@ -48,7 +48,7 @@ int	rt_intersect_sphere(t_ray ray, t_sphere *sphere, t_hit *hit)
 	oc = rt_subtract_vector(ray.origin, sphere->center);
 	quad.a = rt_dotprod_of(ray.direction, ray.direction);
 	quad.b = 2.0 * rt_dotprod_of(oc, ray.direction);
-	quad.c = rt_get_sqmag(oc) - pow(sphere->diameter / 2.0, 2);
+	quad.c = rt_get_sqmag(oc) - sphere->radius * sphere->radius;
 	discriminant = quad.b * quad.b - 4 * quad.a * quad.c;
 	if (discriminant < 0)
 		return (0);
