@@ -103,8 +103,21 @@ LIB_PHONY		= ${LIB_DELETE} ${LIB_CLEAN} ${LIB_FCLEAN} ${LIB_RE}
 ROOT_SRC_FILES	=	rt_main.c
 CAM_SRC_FILES	=	rt_get_camera_axes.c \
 					rt_get_camera_ray.c \
-					rt_get_viewport_point.c
-EVENT_SRC_FILES	=	rt_handlers.c
+					rt_get_viewport_point.c \
+					rt_move_camera_backward.c \
+					rt_move_camera_down.c \
+					rt_move_camera_forward.c \
+					rt_move_camera_left.c \
+					rt_move_camera_right.c \
+					rt_move_camera_up.c \
+					rt_rotate_camera.c
+EVENT_SRC_FILES	=	rt_destroy_on_esc.c \
+					rt_h_close.c \
+					rt_h_kpress.c \
+					rt_move_camera_forw_backw.c \
+					rt_move_camera_left_right.c \
+					rt_move_camera_up_down.c \
+					rt_rotate_camera_event.c
 INTSEC_SRC_FILES	=	rt_find_closest_cylinder.c \
 						rt_find_closest_object.c \
 						rt_find_closest_plane.c \
@@ -119,6 +132,7 @@ INTSEC_SRC_FILES	=	rt_find_closest_cylinder.c \
 						rt_within_height.c
 MATH_SRC_FILES	=	rt_add_vector.c \
 					rt_create_ray.c \
+					rt_crossprod_of.c \
 					rt_dotprod_of.c \
 					rt_get_mag.c \
 					rt_get_point.c \

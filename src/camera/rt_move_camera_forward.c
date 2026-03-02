@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_handlers.c                                      :+:      :+:    :+:   */
+/*   rt_move_camera_forward.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#             */
-/*   Updated: 2025/12/17 02:49:28 by jonnavar         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:30:00 by jonnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minirt.h"
 
-int	rt_h_kpress(int keycode, t_data *data)
+void	rt_move_camera_forward(t_camera *camera, double speed)
 {
-	if (keycode == KEY_ESC)
-	{
-		rt_destroy(data);
-		exit(EXIT_SUCCESS);
-	}
-	return (0);
-}
+	t_coordinates	forward;
+	t_coordinates	movement;
 
-int	rt_h_close(t_data *data)
-{
-	rt_destroy(data);
-	exit(EXIT_SUCCESS);
-	return (0);
+	forward = rt_normalize_vector(camera->orientation);
+	movement = rt_multiply_vector(forward, speed);
+	camera->viewpoint = rt_add_vector(camera->viewpoint, movement);
 }

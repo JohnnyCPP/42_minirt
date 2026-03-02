@@ -22,6 +22,18 @@
 # define KEY_A 97
 # define KEY_S 115
 # define KEY_D 100
+# define KEY_SPACE 32
+# define KEY_LEFT_CTRL 65507
+
+// X11 keycodes for arrow keys on Linux
+# define KEY_UP 65362
+# define KEY_DOWN 65364
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+
+# define CAM_MOV_SPEED 1.0
+// in radians, approximately 5.7 degrees per key press
+# define CAM_ROT_SPEED 0.1
 
 # define EXIT_SUCCESS 0
 # define EXIT_ERROR 1

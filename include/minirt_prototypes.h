@@ -43,6 +43,165 @@ void	rt_destroy(t_data *data);
 void	rt_destroy_scene(t_scene *scene);
 
 /**
+ * @brief Checks for ESC key press and performs cleanup if detected.
+ *
+ * This function is called during keyboard event handling to check if the
+ * ESC key has been pressed. If so, it triggers the complete destruction
+ * of all program resources and exits gracefully. This ensures that no
+ * memory leaks occur when the user quits the program.
+ */
+void	rt_destroy_on_esc(int keycode, t_data *data);
+
+/**
+ * @brief Handles forward/backward camera movement from keyboard input.
+ *
+ * Processes W and S key presses to move the camera along its viewing direction.
+ * Forward movement (W) translates the camera in the direction of its
+ * orientation vector. Backward movement (S) translates in
+ * the opposite direction.
+ *
+ * Movement visualization:
+ *
+ *                    Forward (W)
+ *                        ↑
+ *                        |
+ *                        |
+ *     Camera ●───────────┼───────────► View direction
+ *                        |
+ *                        |
+ *                        ↓
+ *                    Backward (S)
+ *
+ * @param keycode The X11 keycode of the pressed key
+ * @param data Pointer to the main program data structure containing
+ *             the camera to be moved
+ * @return int 1 if a movement was performed (W or S pressed),
+ *             0 otherwise (no action taken)
+ *
+ * @note The movement speed is determined by CAM_MOV_SPEED constant
+ * @note This function only handles the key detection; actual movement
+ *       is delegated to rt_move_camera_forward/backward
+ *
+ * @see rt_move_camera_forward
+ * @see rt_move_camera_backward
+ * @see CAM_MOV_SPEED defined in minirt_constants.h
+ */
+int		rt_move_camera_forw_backw(int keycode, t_data *data);
+
+/**
+ * @brief Handles left/right strafing camera movement from keyboard input.
+ *
+ * Processes A and D key presses to move the camera perpendicular to its
+ * viewing direction (strafing). Left movement (A) translates along the
+ * negative camera right vector. Right movement (D) translates along the
+ * positive camera right vector.
+ *
+ * Movement visualization (top-down view):
+ *
+ *         Left (A)          Right (D)
+ *           ←                 →
+ *           │                 │
+ *           └──────●──────────┘
+ *                Camera
+ *                  ↑
+ *              Forward (into screen)
+ *
+ * @param keycode The X11 keycode of the pressed key
+ * @param data Pointer to the main program data structure containing
+ *             the camera to be moved
+ * @return int 1 if a movement was performed (A or D pressed),
+ *             0 otherwise (no action taken)
+ *
+ * @note The camera's right vector is computed from its orientation
+ *       using the cross product with the world up vector
+ * @note Strafing maintains the camera's viewing direction while
+ *       moving sideways, useful for positioning shots
+ *
+ * @see rt_get_camera_right for right vector calculation
+ * @see rt_move_camera_left
+ * @see rt_move_camera_right
+ */
+int		rt_move_camera_left_right(int keycode, t_data *data);
+
+/**
+ * @brief Handles vertical camera movement from keyboard input.
+ *
+ * Processes SPACE and LEFT CTRL key presses to move the camera along its
+ * local up vector. This creates an intuitive "flying" movement where
+ * up always means "toward the top of the screen" regardless of camera
+ * orientation. When the camera is pitched down, moving up will lift the
+ * camera relative to its tilted view.
+ *
+ * Movement visualization:
+ *
+ *     Without pitch:            With pitch down:
+ *
+ *         Up (SPACE)                 Up (SPACE)
+ *            ↑                          ↗
+ *            |                         /
+ *            |                        /
+ *     ●──────┼──────►            ●───┼──────►
+ *   Camera   | Forward         Camera  Forward
+ *            |                        \
+ *            ↓                          ↘
+ *      Down (CTRL)                  Down (CTRL)
+ *
+ * @param keycode The X11 keycode of the pressed key
+ * @param data Pointer to the main program data structure containing
+ *             the camera to be moved
+ * @return int 1 if a movement was performed (SPACE or LEFT CTRL pressed),
+ *             0 otherwise (no action taken)
+ *
+ * @note Using SPACE and CTRL for vertical movement follows common
+ *       3D software conventions (Blender, CAD tools, etc.)
+ * @note The up vector is computed from the camera's orientation and
+ *       right vector, ensuring it's always perpendicular to the view
+ *
+ * @see rt_get_camera_up for up vector calculation
+ * @see rt_move_camera_up
+ * @see rt_move_camera_down
+ */
+int		rt_move_camera_up_down(int keycode, t_data *data);
+
+/**
+ * @brief Handles camera rotation from arrow key input.
+ *
+ * Processes arrow key presses to rotate the camera's orientation:
+ *     - UP/DOWN: Pitch rotation (look up/down) around the camera's right axis
+ *     - LEFT/RIGHT: Yaw rotation (look left/right) around the world up axis
+ *
+ * Rotation visualization:
+ *
+ *                    Yaw (LEFT/RIGHT)
+ *                 ←─────────●─────────→
+ *                          /|\
+ *                           |
+ *                     Pitch (UP/DOWN)
+ *
+ * The camera uses axis-angle rotation (Rodrigues' formula) for smooth,
+ * gimbal-lock-free rotation:
+ *     - Pitch rotates around the camera's local right vector
+ *     - Yaw rotates around the world Y axis to maintain horizon level
+ *
+ * @param keycode The X11 keycode of the pressed key
+ * @param data Pointer to the main program data structure containing
+ *             the camera to be rotated
+ * @return int 1 if a rotation was performed (arrow key pressed),
+ *             0 otherwise (no action taken)
+ *
+ * @note Rotation speed is determined by CAM_ROT_SPEED constant (radians)
+ * @note Pitch is limited only by floating-point precision; the camera
+ *       can look straight up or down without issue
+ * @note The orientation vector is automatically renormalized after
+ *       each rotation to maintain unit length
+ *
+ * @see rt_pitch_camera for pitch rotation implementation
+ * @see rt_yaw_camera for yaw rotation implementation
+ * @see rt_rotate_axis for the underlying Rodrigues' rotation formula
+ */
+int		rt_rotate_camera_event(int keycode, t_data *data);
+
+/**
  * @brief Handles keyboard press events.
  * 
  * Currently only handles ESC key to exit the program cleanly.
@@ -1122,5 +1281,85 @@ int		rt_within_height(double y, t_cylinder *cyl);
  * @see rt_set_bottom_cap, rt_set_top_cap, rt_check_cap_hit
  */
 int		rt_intersect_caps(t_ray ray, t_cylinder *cyl, t_hit *hit);
+
+/**
+ * @brief Moves camera forward along its viewing direction.
+ *
+ * Camera moves in the direction it's pointing (orientation vector).
+ * Positive speed moves forward, negative moves backward.
+ *
+ * @param camera Pointer to camera to move
+ * @param speed Movement speed (units per key press)
+ */
+void	rt_move_camera_forward(t_camera *camera, double speed);
+
+/**
+ * @brief Moves camera backward (opposite of viewing direction).
+ *
+ * @param camera Pointer to camera to move
+ * @param speed Movement speed (units per key press)
+ */
+void	rt_move_camera_backward(t_camera *camera, double speed);
+
+/**
+ * @brief Moves camera left (perpendicular to viewing direction).
+ *
+ * Uses the camera's right vector (cross product of world up and orientation)
+ * to determine the left direction (negative right).
+ *
+ * @param camera Pointer to camera to move
+ * @param speed Movement speed (units per key press)
+ */
+void	rt_move_camera_left(t_camera *camera, double speed);
+
+/**
+ * @brief Moves camera right (perpendicular to viewing direction).
+ *
+ * @param camera Pointer to camera to move
+ * @param speed Movement speed (units per key press)
+ */
+void	rt_move_camera_right(t_camera *camera, double speed);
+
+/**
+ * @brief Moves camera up along its local up vector.
+ *
+ * Uses the camera's up vector (perpendicular to view direction and right)
+ * to move vertically. This creates an intuitive "flying" movement where
+ * up always means "toward the top of the screen" regardless of orientation.
+ *
+ * @param camera Pointer to camera to move
+ * @param speed Movement speed (units per key press)
+ */
+void	rt_move_camera_up(t_camera *camera, double speed);
+
+/**
+ * @brief Moves camera down along its local up vector.
+ *
+ * @param camera Pointer to camera to move
+ * @param speed Movement speed (units per key press)
+ */
+void	rt_move_camera_down(t_camera *camera, double speed);
+
+/**
+ * @brief Rotates camera orientation around its right vector (pitch).
+ *
+ * Pitch rotation: looking up and down.
+ * Rotates around the camera's local X axis (right vector).
+ *
+ * @param camera Pointer to camera to rotate
+ * @param angle Rotation angle in radians (positive = look up)
+ */
+void	rt_pitch_camera(t_camera *camera, double angle);
+
+/**
+ * @brief Rotates camera orientation around world up vector (yaw).
+ *
+ * Yaw rotation: looking left and right.
+ * Rotates around the world Y axis (0,1,0) to maintain horizon level.
+ *
+ * @param camera Pointer to camera to rotate
+ * @param angle Rotation angle in radians (positive = look right)
+ */
+void	rt_yaw_camera(t_camera *camera, double angle);
 
 #endif
