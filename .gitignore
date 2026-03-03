@@ -1,0 +1,13 @@
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+miniRT
+*.d
+*.swp
+*.swo
+*~
+.vscode/
+.DS_Store
+Thumbs.db

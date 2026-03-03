@@ -117,7 +117,9 @@ EVENT_SRC_FILES	=	rt_destroy_on_esc.c \
 					rt_move_camera_forw_backw.c \
 					rt_move_camera_left_right.c \
 					rt_move_camera_up_down.c \
-					rt_rotate_camera_event.c
+					rt_resize_object.c \
+					rt_rotate_camera_event.c \
+					rt_select_object.c
 INTSEC_SRC_FILES	=	rt_find_closest_cylinder.c \
 						rt_find_closest_object.c \
 						rt_find_closest_plane.c \

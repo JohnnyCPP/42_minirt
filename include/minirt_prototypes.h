@@ -1362,4 +1362,45 @@ void	rt_pitch_camera(t_camera *camera, double angle);
  */
 void	rt_yaw_camera(t_camera *camera, double angle);
 
+/**
+ * @brief Cycles through selectable objects (spheres, cylinders) on Tab.
+ *
+ * @param keycode The keycode of the pressed key
+ * @param data Pointer to main data structure
+ * @return int 1 if selection changed, 0 otherwise
+ */
+int		rt_select_object(int keycode, t_data *data);
+
+/**
+ * @brief Helper to advance selection from cylinder state.
+ *
+ * @param data Pointer to main data structure
+ * @param n_sp Number of spheres in scene
+ * @param n_cy Number of cylinders in scene
+ */
+void	rt_advance_from_cyl(t_data *data, int n_sp, int n_cy);
+
+/**
+ * @brief Resizes the diameter of the selected object on +/- keys.
+ *
+ * For spheres: changes diameter and recomputes radius.
+ * For cylinders: changes diameter (width) and recomputes radius.
+ *
+ * @param keycode The keycode of the pressed key
+ * @param data Pointer to main data structure
+ * @return int 1 if resize occurred, 0 otherwise
+ */
+int		rt_resize_diameter(int keycode, t_data *data);
+
+/**
+ * @brief Resizes the height of the selected cylinder on [/] keys.
+ *
+ * Only applies when a cylinder is selected.
+ *
+ * @param keycode The keycode of the pressed key
+ * @param data Pointer to main data structure
+ * @return int 1 if resize occurred, 0 otherwise
+ */
+int		rt_resize_height(int keycode, t_data *data);
+
 #endif

@@ -35,6 +35,21 @@
 // in radians, approximately 5.7 degrees per key press
 # define CAM_ROT_SPEED 0.1
 
+// Key codes for object selection and resizing
+# define KEY_TAB 65289
+# define KEY_PLUS 109
+# define KEY_MINUS 108
+# define KEY_LBRACKET 91
+# define KEY_RBRACKET 93
+
+// Selection types
+# define SEL_NONE 0
+# define SEL_SPHERE 1
+# define SEL_CYLINDER 2
+
+// Resize step for object dimensions
+# define RESIZE_STEP 0.5
+
 # define EXIT_SUCCESS 0
 # define EXIT_ERROR 1
 

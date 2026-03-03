@@ -166,6 +166,18 @@ typedef struct s_scene
 }	t_scene;
 
 /**
+ * @brief Tracks the currently selected object for interactive resizing.
+ *
+ * @member type 0 = none, 1 = sphere, 2 = cylinder
+ * @member index Index into the corresponding object array
+ */
+typedef struct s_selection
+{
+	int	type;
+	int	index;
+}	t_selection;
+
+/**
  * @brief All data processed by the program, including MinilibX resources 
  *        and a scene description.
  */
@@ -173,6 +185,7 @@ typedef struct s_data
 {
 	t_minilib	mlx;
 	t_scene		scene;
+	t_selection	selected;
 }	t_data;
 
 /**
