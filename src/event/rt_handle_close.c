@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_rotate_camera_event.c                           :+:      :+:    :+:   */
+/*   rt_handle_close.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
@@ -11,30 +11,9 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
-int	rt_rotate_camera_event(t_data *data)
+int	rt_handle_close(t_data *data)
 {
-	int	moved;
-
-	moved = 0;
-	if (data->keys.up)
-	{
-		rt_pitch_camera(&data->scene.camera, -CAM_ROT_SPEED);
-		moved = 1;
-	}
-	if (data->keys.down)
-	{
-		rt_pitch_camera(&data->scene.camera, CAM_ROT_SPEED);
-		moved = 1;
-	}
-	if (data->keys.left)
-	{
-		rt_yaw_camera(&data->scene.camera, -CAM_ROT_SPEED);
-		moved = 1;
-	}
-	if (data->keys.right)
-	{
-		rt_yaw_camera(&data->scene.camera, CAM_ROT_SPEED);
-		moved = 1;
-	}
-	return (moved);
+	rt_destroy(data);
+	exit(EXIT_SUCCESS);
+	return (0);
 }

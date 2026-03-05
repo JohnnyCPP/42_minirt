@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_h_kpress.c                                      :+:      :+:    :+:   */
+/*   rt_press_resize_key.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
@@ -11,22 +11,14 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
-int	rt_h_kpress(int keycode, t_data *data)
+void	rt_press_resize_key(int keycode, t_key_state *keys)
 {
-	rt_destroy_on_esc(keycode, data);
-	if (rt_move_camera_up_down(keycode, data) == 1)
-		rt_render(data);
-	if (rt_move_camera_forw_backw(keycode, data) == 1)
-		rt_render(data);
-	if (rt_move_camera_left_right(keycode, data) == 1)
-		rt_render(data);
-	if (rt_rotate_camera_event(keycode, data) == 1)
-		rt_render(data);
-	if (rt_select_object(keycode, data) == 1)
-		rt_render(data);
-	if (rt_resize_diameter(keycode, data) == 1)
-		rt_render(data);
-	if (rt_resize_height(keycode, data) == 1)
-		rt_render(data);
-	return (0);
+	if (keycode == KEY_MINUS)
+		keys->minus = 1;
+	else if (keycode == KEY_PLUS)
+		keys->plus = 1;
+	else if (keycode == KEY_LBRACKET)
+		keys->left_bracket = 1;
+	else if (keycode == KEY_RBRACKET)
+		keys->right_bracket = 1;
 }

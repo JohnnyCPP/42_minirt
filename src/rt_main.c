@@ -30,10 +30,9 @@ int	main(int argc, char **argv)
 		rt_free_scene(&data.scene);
 		return (EXIT_ERROR);
 	}
+	rt_configure_events(&data);
 	rt_render(&data);
-	mlx_hook(data.mlx.win, KeyPress, KeyPressMask, rt_h_kpress, &data);
-	mlx_hook(data.mlx.win, DestroyNotify, StructureNotifyMask,
-		rt_h_close, &data);
+	mlx_loop_hook(data.mlx.xvar, rt_loop_hook, &data);
 	mlx_loop(data.mlx.xvar);
 	return (EXIT_SUCCESS);
 }

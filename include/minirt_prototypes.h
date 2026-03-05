@@ -72,7 +72,6 @@ void	rt_destroy_on_esc(int keycode, t_data *data);
  *                        ↓
  *                    Backward (S)
  *
- * @param keycode The X11 keycode of the pressed key
  * @param data Pointer to the main program data structure containing
  *             the camera to be moved
  * @return int 1 if a movement was performed (W or S pressed),
@@ -86,7 +85,7 @@ void	rt_destroy_on_esc(int keycode, t_data *data);
  * @see rt_move_camera_backward
  * @see CAM_MOV_SPEED defined in minirt_constants.h
  */
-int		rt_move_camera_forw_backw(int keycode, t_data *data);
+int		rt_move_camera_forw_backw(t_data *data);
 
 /**
  * @brief Handles left/right strafing camera movement from keyboard input.
@@ -106,7 +105,6 @@ int		rt_move_camera_forw_backw(int keycode, t_data *data);
  *                  ↑
  *              Forward (into screen)
  *
- * @param keycode The X11 keycode of the pressed key
  * @param data Pointer to the main program data structure containing
  *             the camera to be moved
  * @return int 1 if a movement was performed (A or D pressed),
@@ -121,7 +119,7 @@ int		rt_move_camera_forw_backw(int keycode, t_data *data);
  * @see rt_move_camera_left
  * @see rt_move_camera_right
  */
-int		rt_move_camera_left_right(int keycode, t_data *data);
+int		rt_move_camera_left_right(t_data *data);
 
 /**
  * @brief Handles vertical camera movement from keyboard input.
@@ -146,7 +144,6 @@ int		rt_move_camera_left_right(int keycode, t_data *data);
  *            ↓                          ↘
  *      Down (CTRL)                  Down (CTRL)
  *
- * @param keycode The X11 keycode of the pressed key
  * @param data Pointer to the main program data structure containing
  *             the camera to be moved
  * @return int 1 if a movement was performed (SPACE or LEFT CTRL pressed),
@@ -161,7 +158,7 @@ int		rt_move_camera_left_right(int keycode, t_data *data);
  * @see rt_move_camera_up
  * @see rt_move_camera_down
  */
-int		rt_move_camera_up_down(int keycode, t_data *data);
+int		rt_move_camera_up_down(t_data *data);
 
 /**
  * @brief Handles camera rotation from arrow key input.
@@ -183,7 +180,6 @@ int		rt_move_camera_up_down(int keycode, t_data *data);
  *     - Pitch rotates around the camera's local right vector
  *     - Yaw rotates around the world Y axis to maintain horizon level
  *
- * @param keycode The X11 keycode of the pressed key
  * @param data Pointer to the main program data structure containing
  *             the camera to be rotated
  * @return int 1 if a rotation was performed (arrow key pressed),
@@ -199,18 +195,30 @@ int		rt_move_camera_up_down(int keycode, t_data *data);
  * @see rt_yaw_camera for yaw rotation implementation
  * @see rt_rotate_axis for the underlying Rodrigues' rotation formula
  */
-int		rt_rotate_camera_event(int keycode, t_data *data);
+int		rt_rotate_camera_event(t_data *data);
 
 /**
  * @brief Handles keyboard press events.
  * 
- * Currently only handles ESC key to exit the program cleanly.
+ * - ESC key to exit the program cleanly
+ * - TAB key to select objects
+ * - W, A, S, D, SPACE, and LEFT_CTRL keys to move the camera
+ * - UP, DOWN, LEFT, and RIGHT keys to rotate the camera
  * 
  * @param keycode The keycode of the pressed key
  * @param data Pointer to main data structure
  * @return int Always returns 0 to indicate event was processed
  */
-int		rt_h_kpress(int keycode, t_data *data);
+int		rt_handle_kpress(int keycode, t_data *data);
+
+/**
+ * @brief Handles keyboard release events.
+ * 
+ * @param keycode The keycode of the pressed key
+ * @param data Pointer to main data structure
+ * @return int Always returns 0 to indicate event was processed
+ */
+int		rt_handle_krelease(int keycode, t_data *data);
 
 /**
  * @brief Handles window close button (red cross) events.
@@ -220,7 +228,7 @@ int		rt_h_kpress(int keycode, t_data *data);
  * @param data Pointer to main data structure
  * @return int Always returns 0 (though function exits before return)
  */
-int		rt_h_close(t_data *data);
+int		rt_handle_close(t_data *data);
 
 /**
  * @brief Puts a single pixel at (x,y) coordinates in the image buffer.
@@ -1386,21 +1394,103 @@ void	rt_advance_from_cyl(t_data *data, int n_sp, int n_cy);
  * For spheres: changes diameter and recomputes radius.
  * For cylinders: changes diameter (width) and recomputes radius.
  *
- * @param keycode The keycode of the pressed key
  * @param data Pointer to main data structure
  * @return int 1 if resize occurred, 0 otherwise
  */
-int		rt_resize_diameter(int keycode, t_data *data);
+int		rt_resize_diameter(t_data *data);
 
 /**
  * @brief Resizes the height of the selected cylinder on [/] keys.
  *
  * Only applies when a cylinder is selected.
  *
- * @param keycode The keycode of the pressed key
  * @param data Pointer to main data structure
  * @return int 1 if resize occurred, 0 otherwise
  */
-int		rt_resize_height(int keycode, t_data *data);
+int		rt_resize_height(t_data *data);
+
+/**
+ * @brief Binds handler functions to mlx events. Initializes keys to zero.
+ *
+ * - If keys are pressed, assign them 1
+ * - If keys are released, assign them 0
+ * - If ESC is pressed, release resources and terminate
+ *
+ * Only applies when a cylinder is selected.
+ *
+ * @param data Pointer to main data structure
+ */
+void	rt_configure_events(t_data *data);
+
+/**
+ * @brief Detects if a move key is pressed and updates t_key_state structure.
+ *
+ * Detects W, S, A, D, SPACE, and LEFT_CTRL keys.
+ *
+ * @param keycode The keycode of the pressed key
+ * @param keys Pointer to the keys
+ */
+void	rt_press_move_key(int keycode, t_key_state *keys);
+
+/**
+ * @brief Detects if a resize key is pressed and updates t_key_state structure.
+ *
+ * Detects -, +, [, and ] keys.
+ *
+ * @param keycode The keycode of the pressed key
+ * @param keys Pointer to the keys
+ */
+void	rt_press_resize_key(int keycode, t_key_state *keys);
+
+/**
+ * @brief Detects if a rotate key is pressed and updates t_key_state structure.
+ *
+ * Detects UP, DOWN, LEFT, and RIGHT keys.
+ *
+ * @param keycode The keycode of the pressed key
+ * @param keys Pointer to the keys
+ */
+void	rt_press_rotate_key(int keycode, t_key_state *keys);
+
+/**
+ * @brief Detects if a move key is released and updates t_key_state structure.
+ *
+ * Detects W, S, A, D, SPACE, and LEFT_CTRL keys.
+ *
+ * @param keycode The keycode of the released key
+ * @param keys Pointer to the keys
+ */
+void	rt_release_move_key(int keycode, t_key_state *keys);
+
+/**
+ * @brief Detects if a resize key is released and updates t_key_state structure.
+ *
+ * Detects -, +, [, and ] keys.
+ *
+ * @param keycode The keycode of the released key
+ * @param keys Pointer to the keys
+ */
+void	rt_release_resize_key(int keycode, t_key_state *keys);
+
+/**
+ * @brief Detects if a rotate key is released and updates t_key_state structure.
+ *
+ * Detects UP, DOWN, LEFT, and RIGHT keys.
+ *
+ * @param keycode The keycode of the released key
+ * @param keys Pointer to the keys
+ */
+void	rt_release_rotate_key(int keycode, t_key_state *keys);
+
+/**
+ * @brief Main loop hook - called continuously by MLX.
+ *
+ * This function checks key states and updates camera position/rotation
+ * continuously while keys are held down.
+ *
+ * @param data Main data structure
+ * @return int Always returns 0
+ */
+int		rt_loop_hook(t_data *data);
 
 #endif

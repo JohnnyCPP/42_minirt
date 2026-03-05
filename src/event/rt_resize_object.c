@@ -38,16 +38,16 @@ static int	rt_resize_cyl_height(t_cylinder *cyl, double step)
 	return (1);
 }
 
-int	rt_resize_diameter(int keycode, t_data *data)
+int	rt_resize_diameter(t_data *data)
 {
 	double	step;
 
-	if (keycode != KEY_PLUS && keycode != KEY_MINUS)
+	if (!data->keys.plus && !data->keys.minus)
 		return (0);
 	if (data->selected.type == SEL_NONE)
 		return (0);
 	step = RESIZE_STEP;
-	if (keycode == KEY_MINUS)
+	if (data->keys.minus)
 		step = -RESIZE_STEP;
 	if (data->selected.type == SEL_SPHERE)
 		return (rt_resize_sphere(
@@ -58,16 +58,16 @@ int	rt_resize_diameter(int keycode, t_data *data)
 	return (0);
 }
 
-int	rt_resize_height(int keycode, t_data *data)
+int	rt_resize_height(t_data *data)
 {
 	double	step;
 
-	if (keycode != KEY_RBRACKET && keycode != KEY_LBRACKET)
+	if (!data->keys.left_bracket && !data->keys.right_bracket)
 		return (0);
 	if (data->selected.type != SEL_CYLINDER)
 		return (0);
 	step = RESIZE_STEP;
-	if (keycode == KEY_LBRACKET)
+	if (data->keys.left_bracket)
 		step = -RESIZE_STEP;
 	return (rt_resize_cyl_height(
 			data->scene.cylinders[data->selected.index], step));

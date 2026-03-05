@@ -36,9 +36,15 @@
 # define CAM_ROT_SPEED 0.1
 
 // Key codes for object selection and resizing
+//
+// note: I'm updating KEY_PLUS and KEY_MINUS 
+//       because my version of X11 is using 
+//       different keycodes
 # define KEY_TAB 65289
-# define KEY_PLUS 109
-# define KEY_MINUS 108
+//# define KEY_PLUS 109
+# define KEY_PLUS 61
+//# define KEY_MINUS 108
+# define KEY_MINUS 45
 # define KEY_LBRACKET 91
 # define KEY_RBRACKET 93
 

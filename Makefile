@@ -111,12 +111,21 @@ CAM_SRC_FILES	=	rt_get_camera_axes.c \
 					rt_move_camera_right.c \
 					rt_move_camera_up.c \
 					rt_rotate_camera.c
-EVENT_SRC_FILES	=	rt_destroy_on_esc.c \
-					rt_h_close.c \
-					rt_h_kpress.c \
+EVENT_SRC_FILES	=	rt_configure_events.c \
+					rt_destroy_on_esc.c \
+					rt_handle_close.c \
+					rt_handle_kpress.c \
+					rt_handle_krelease.c \
+					rt_loop_hook.c \
 					rt_move_camera_forw_backw.c \
 					rt_move_camera_left_right.c \
 					rt_move_camera_up_down.c \
+					rt_press_move_key.c \
+					rt_press_resize_key.c \
+					rt_press_rotate_key.c \
+					rt_release_move_key.c \
+					rt_release_resize_key.c \
+					rt_release_rotate_key.c \
 					rt_resize_object.c \
 					rt_rotate_camera_event.c \
 					rt_select_object.c

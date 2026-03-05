@@ -11,17 +11,20 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
-int	rt_move_camera_left_right(int keycode, t_data *data)
+int	rt_move_camera_left_right(t_data *data)
 {
-	if (keycode == KEY_A)
+	int	moved;
+
+	moved = 0;
+	if (data->keys.a)
 	{
 		rt_move_camera_left(&data->scene.camera, CAM_MOV_SPEED);
-		return (1);
+		moved = 1;
 	}
-	else if (keycode == KEY_D)
+	if (data->keys.d)
 	{
 		rt_move_camera_right(&data->scene.camera, CAM_MOV_SPEED);
-		return (1);
+		moved = 1;
 	}
-	return (0);
+	return (moved);
 }

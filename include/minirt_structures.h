@@ -177,6 +177,24 @@ typedef struct s_selection
 	int	index;
 }	t_selection;
 
+typedef struct s_key_state
+{
+	int	w;
+	int	s;
+	int	a;
+	int	d;
+	int	space;
+	int	left_ctrl;
+	int	up;
+	int	down;
+	int	left;
+	int	right;
+	int	minus;
+	int	plus;
+	int	left_bracket;
+	int	right_bracket;
+}	t_key_state;
+
 /**
  * @brief All data processed by the program, including MinilibX resources 
  *        and a scene description.
@@ -186,6 +204,7 @@ typedef struct s_data
 	t_minilib	mlx;
 	t_scene		scene;
 	t_selection	selected;
+	t_key_state	keys;
 }	t_data;
 
 /**

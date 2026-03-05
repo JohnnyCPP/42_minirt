@@ -1,40 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_rotate_camera_event.c                           :+:      :+:    :+:   */
+/*   rt_release_move_key.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jonnavar <marvin@42.fr>                    +#+  +:+       +#+        */
 /*       igenez-y <igenez-y@student.42madrid.com> +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 23:05:07 by jonnavar          #+#    #+#             */
-/*   Updated: 2025/12/17 02:49:28 by jonnavar         ###   ########.fr       */
+/*   Updated: 2026/03/03 20:00:00 by igenez-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minirt.h"
 
-int	rt_rotate_camera_event(t_data *data)
+void	rt_release_move_key(int keycode, t_key_state *keys)
 {
-	int	moved;
-
-	moved = 0;
-	if (data->keys.up)
-	{
-		rt_pitch_camera(&data->scene.camera, -CAM_ROT_SPEED);
-		moved = 1;
-	}
-	if (data->keys.down)
-	{
-		rt_pitch_camera(&data->scene.camera, CAM_ROT_SPEED);
-		moved = 1;
-	}
-	if (data->keys.left)
-	{
-		rt_yaw_camera(&data->scene.camera, -CAM_ROT_SPEED);
-		moved = 1;
-	}
-	if (data->keys.right)
-	{
-		rt_yaw_camera(&data->scene.camera, CAM_ROT_SPEED);
-		moved = 1;
-	}
-	return (moved);
+	if (keycode == KEY_W)
+		keys->w = 0;
+	else if (keycode == KEY_S)
+		keys->s = 0;
+	else if (keycode == KEY_A)
+		keys->a = 0;
+	else if (keycode == KEY_D)
+		keys->d = 0;
+	else if (keycode == KEY_SPACE)
+		keys->space = 0;
+	else if (keycode == KEY_LEFT_CTRL)
+		keys->left_ctrl = 0;
 }

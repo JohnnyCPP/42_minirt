@@ -11,17 +11,20 @@
 /* ************************************************************************** */
 #include "minirt.h"
 
-int	rt_move_camera_forw_backw(int keycode, t_data *data)
+int	rt_move_camera_forw_backw(t_data *data)
 {
-	if (keycode == KEY_W)
+	int	moved;
+
+	moved = 0;
+	if (data->keys.w)
 	{
 		rt_move_camera_forward(&data->scene.camera, CAM_MOV_SPEED);
-		return (1);
+		moved = 1;
 	}
-	else if (keycode == KEY_S)
+	if (data->keys.s)
 	{
 		rt_move_camera_backward(&data->scene.camera, CAM_MOV_SPEED);
-		return (1);
+		moved = 1;
 	}
-	return (0);
+	return (moved);
 }
