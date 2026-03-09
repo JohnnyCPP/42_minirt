@@ -43,17 +43,32 @@ Additional Makefile rules:
 
 - make re - Recompile from scratch
 
-- make bonus - Compile with bonus features (if implemented)
+- make help - Show help
+
+- make sanitize - Compile with fsanitize
+
+Run the program with a scene file:
+
+```bash
+./miniRT <path/to/scene.rt>
+```
 
 ## Resources
 
 Here's a list of references consulted for this project:
 
-- CommonMark specification version 0.31.2 (2024-01-28): https://spec[.]commonmark[.]org/
+- YouTube videos
 
+- Reddit posts
 
-- My notes in Notion
+- www.scratchapixel.com: Comprehensive computer graphics lessons
 
-- My diagrams in draw.io
+- Ray Tracing in One Weekend books: Introduction to ray tracing concepts
+
+- MiniLibX documentation: man mlx
+
+- Our notes in Notion
+
+- Our diagrams in draw.io
 
 AI was not used for any task or any part of the project.
