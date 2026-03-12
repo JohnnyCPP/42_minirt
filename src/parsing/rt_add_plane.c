@@ -26,7 +26,7 @@ static int	rt_count_objects(void **objects)
 int	rt_new_pl(t_plane **aux, t_plane ***planes, t_plane plane)
 {
 	*aux = (t_plane *) malloc(sizeof(t_plane));
-	if (!aux)
+	if (!*aux)
 	{
 		free(*planes);
 		rt_error("Failed to allocate plane");

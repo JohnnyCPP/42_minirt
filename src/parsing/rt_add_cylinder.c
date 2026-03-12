@@ -26,7 +26,7 @@ static int	rt_count_objects(void **objects)
 int	rt_new_cyl(t_cylinder **aux, t_cylinder ***cylinders, t_cylinder cylinder)
 {
 	*aux = (t_cylinder *) malloc(sizeof(t_cylinder));
-	if (!aux)
+	if (!*aux)
 	{
 		free(*cylinders);
 		*cylinders = NULL;

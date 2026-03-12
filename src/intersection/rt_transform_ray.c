@@ -40,9 +40,9 @@ void	rt_basis_aligned(t_coordinates a, t_coordinates *rgt, t_coordinates *up)
  */
 void	rt_basis_general(t_coordinates a, t_coordinates *rgt, t_coordinates *up)
 {
-	rgt->x = 1.0 * a.z - a.y * 0.0;
-	rgt->y = a.z * 0.0 - a.x * 0.0;
-	rgt->z = a.x * 1.0 - 0.0 * a.y;
+	rgt->x = 1.0 * a.z - 0.0 * a.y;
+	rgt->y = 0.0 * a.x - 0.0 * a.z;
+	rgt->z = 0.0 * a.y - 1.0 * a.x;
 	*rgt = rt_normalize_vector(*rgt);
 	up->x = a.y * rgt->z - a.z * rgt->y;
 	up->y = a.z * rgt->x - a.x * rgt->z;

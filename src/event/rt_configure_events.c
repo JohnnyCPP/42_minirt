@@ -36,5 +36,5 @@ void	rt_configure_events(t_data *data)
 	mlx_hook(data->mlx.win, KeyRelease, KeyReleaseMask,
 		rt_handle_krelease, data);
 	mlx_hook(data->mlx.win, DestroyNotify, StructureNotifyMask,
-		rt_handle_close, &data);
+		rt_handle_close, data);
 }

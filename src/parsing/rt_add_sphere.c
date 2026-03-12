@@ -26,7 +26,7 @@ static int	rt_count_objects(void **objects)
 int	rt_new_sp(t_sphere **aux, t_sphere ***spheres, t_sphere sphere)
 {
 	*aux = (t_sphere *) malloc(sizeof(t_sphere));
-	if (!aux)
+	if (!*aux)
 	{
 		free(*spheres);
 		*spheres = NULL;
