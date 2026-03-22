@@ -33,5 +33,4 @@ make miniRT
 ```
 
 The default scene with a sphere and a cylinder should look similar to the following example:
-:w
 ![42](./resources/scene.png "scene.rt")
