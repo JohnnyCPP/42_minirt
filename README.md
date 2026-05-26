@@ -3,9 +3,10 @@
 ![image](./resources/42_madrid.jpg)
 
 > 42 Madrid is an academy for values, attitude and learning "hard and soft skills" in the digital environment.
-MiniRT is a graphics engine that renders 3D scenes using the Ray Tracing algorithm, built from scratch in C.
 
 ## Project Overview
+
+MiniRT is a graphics engine that renders 3D scenes using the Ray Tracing algorithm, built from scratch in C.
 
 The Minirt project is a part of the 42 School curriculum where students
 create a simplified version of a ray tracer. The goal is to understand how 
